@@ -24,11 +24,11 @@ export function Hero() {
     const t = setTimeout(() => go(i + 1), 7000);
     return () => clearTimeout(t);
   }, [i, paused, go]);
-  const s = SLIDES[i];
+  const s = SLIDES[i]!;
   return (
     <section id="home" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-teal-deep" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-roledescription="carousel">
       {prev !== null && (
-        <img src={SLIDES[prev].img} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+        <img src={SLIDES[prev]!.img} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
       )}
       <div key={i} className={`absolute inset-0 ${prev !== null ? "animate-doors" : ""}`}>
         <img src={s.img} alt={s.alt} fetchPriority={i === 0 ? "high" : "auto"} className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
@@ -263,8 +263,8 @@ export function Testimonials() {
           className="relative mx-auto mt-20 max-w-4xl overflow-hidden"
           onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
-          onTouchStart={(e) => (touch.current = e.touches[0].clientX)}
-          onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) setI((v) => (v + (dx < 0 ? 1 : 2)) % 3); }}
+          onTouchStart={(e) => (touch.current = e.touches[0]!.clientX)}
+          onTouchEnd={(e) => { const dx = e.changedTouches[0]!.clientX - touch.current; if (Math.abs(dx) > 40) setI((v) => (v + (dx < 0 ? 1 : 2)) % 3); }}
           aria-roledescription="carousel"
         >
           <div className="flex transition-transform duration-1000 ease-[cubic-bezier(.77,0,.18,1)]" style={{ transform: `translateX(-${i * 100}%)` }}>
@@ -303,13 +303,13 @@ export function Contact() {
     const f = new FormData(e.currentTarget);
     if (f.get("website")) return; // honeypot
     const err: Record<string, string> = {};
-    if (String(f.get("name") || "").trim().length < 2) err.name = "Please enter your full name.";
-    if (!/^\S+@\S+\.\S+$/.test(String(f.get("email") || ""))) err.email = "Please enter a valid email address.";
-    if (!/^[+\d\s()-]{7,}$/.test(String(f.get("phone") || ""))) err.phone = "Please enter a valid phone number.";
-    if (!f.get("type")) err.type = "Please choose a project type.";
-    if (String(f.get("location") || "").trim().length < 2) err.location = "Please enter the project location.";
-    if (String(f.get("message") || "").trim().length < 10) err.message = "Please tell us a little about your project.";
-    if (!f.get("consent")) err.consent = "Please agree to be contacted.";
+    if (String(f.get("name") || "").trim().length < 2) err["name"] = "Please enter your full name.";
+    if (!/^\S+@\S+\.\S+$/.test(String(f.get("email") || ""))) err["email"] = "Please enter a valid email address.";
+    if (!/^[+\d\s()-]{7,}$/.test(String(f.get("phone") || ""))) err["phone"] = "Please enter a valid phone number.";
+    if (!f.get("type")) err["type"] = "Please choose a project type.";
+    if (String(f.get("location") || "").trim().length < 2) err["location"] = "Please enter the project location.";
+    if (String(f.get("message") || "").trim().length < 10) err["message"] = "Please tell us a little about your project.";
+    if (!f.get("consent")) err["consent"] = "Please agree to be contacted.";
     setErrors(err);
     if (Object.keys(err).length === 0) setStatus("pending");
   };

@@ -9,7 +9,8 @@ const Pin = (p: { className?: string }) => (
     <path d="M11 8c3-1 5 1 4.5 3.5S12 14 11.5 12M11 9l-2.5 10" strokeLinecap="round" />
   </svg>
 );
-export const SOCIAL_ICONS: Record<string, (p: { className?: string }) => React.ReactElement> = {
+type IconC = (p: { className?: string }) => React.ReactElement;
+export const SOCIAL_ICONS: Record<"Instagram" | "Pinterest" | "LinkedIn" | "Facebook", IconC> = {
   Instagram: (p) => <Instagram className={p.className} />,
   Pinterest: Pin,
   LinkedIn: (p) => <Linkedin className={p.className} />,
@@ -70,7 +71,7 @@ export function SocialRail() {
   return (
     <ul className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-1 md:flex" aria-label="Social media">
       {SOCIALS.map((s) => {
-        const Icon = SOCIAL_ICONS[s.name];
+        const Icon = SOCIAL_ICONS[s.name as keyof typeof SOCIAL_ICONS];
         return (
           <li key={s.name}>
             <a href={s.href} aria-label={s.name} className="group flex h-11 items-center bg-teal text-ivory transition-colors hover:bg-teal-deep focus-visible:bg-teal-deep">
@@ -166,7 +167,7 @@ export function Footer() {
             <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Studio for Eclectic Architecture</p>
             <p className="mt-3 text-sm leading-relaxed">Architecture, interiors, landscapes and technical expertise brought together to create thoughtfully designed spaces.</p>
             <div className="mt-6 flex gap-2">
-              {SOCIALS.map((s) => { const I = SOCIAL_ICONS[s.name]; return (
+              {SOCIALS.map((s) => { const I = SOCIAL_ICONS[s.name as keyof typeof SOCIAL_ICONS]; return (
                 <a key={s.name} href={s.href} aria-label={s.name} className="grid h-10 w-10 place-items-center border border-ivory/20 transition-colors hover:border-cyan hover:text-cyan"><I className="h-4 w-4" /></a>
               ); })}
             </div>
