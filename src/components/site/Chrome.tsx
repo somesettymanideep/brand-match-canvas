@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Menu, X, Instagram, Linkedin, Facebook } from "lucide-react";
-import logo from "@/assets/stuq-logo.png.asset.json";
+import logo from "@/assets/stuq-logo.png";
 import { NAV, SOCIALS } from "./data";
 
 const Pin = (p: { className?: string }) => (
