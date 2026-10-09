@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Menu, X, Instagram, Linkedin, Facebook } from "lucide-react";
-import logo from "@/assets/stuq-logo.png.asset.json";
+import logo from "@/assets/stuq-logo.png";
 import { NAV, SOCIALS } from "./data";
 
 const Pin = (p: { className?: string }) => (
@@ -34,7 +34,7 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-10">
         <a href="#home" className="shrink-0 rounded-sm bg-ivory/95 px-3 py-1.5" aria-label="STUQ home">
-          <img src={logo.url} alt="STUQ – Studio for Eclectic Architecture" className={`w-auto transition-all duration-500 ${scrolled ? "h-8" : "h-10"}`} />
+          <img src={logo} alt="STUQ – Studio for Eclectic Architecture" className={`w-auto transition-all duration-500 ${scrolled ? "h-8" : "h-10"}`} />
         </a>
         <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
           {NAV.map((n) => (
@@ -163,7 +163,7 @@ export function Footer() {
         </div>
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="inline-block rounded-sm bg-ivory px-3 py-2"><img src={logo.url} alt="STUQ logo" className="h-10 w-auto" loading="lazy" /></div>
+            <div className="inline-block rounded-sm bg-ivory px-3 py-2"><img src={logo} alt="STUQ logo" className="h-10 w-auto" loading="lazy" /></div>
             <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Studio for Eclectic Architecture</p>
             <p className="mt-3 text-sm leading-relaxed">Architecture, interiors, landscapes and technical expertise brought together to create thoughtfully designed spaces.</p>
             <div className="mt-6 flex gap-2">
