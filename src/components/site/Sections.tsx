@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowLeft, Download, Play, X, Compass, LayoutGrid, Sun, Quote, Plus } from "lucide-react";
+import { ArrowRight, ArrowLeft, Download, Play, Pause, Volume2, VolumeX, X, Compass, LayoutGrid, Sun, Quote, Plus } from "lucide-react";
 import { SLIDES, PROJECTS, SERVICES, FAQS } from "./data";
 import studio from "@/assets/studio.jpg";
+import studioVideo from "@/assets/studio-video.mp4";
 import vastu from "@/assets/vastu.jpg";
 import p1 from "@/assets/p1.jpg";
 import p2 from "@/assets/p2.jpg";
@@ -32,13 +33,12 @@ export function Hero() {
       )}
       <div key={i} className={`absolute inset-0 ${prev !== null ? "animate-doors" : ""}`}>
         <img src={s.img} alt={s.alt} fetchPriority={i === 0 ? "high" : "auto"} className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
-        <div className="hero-overlay absolute inset-0" />
       </div>
       <Container className="relative flex h-full flex-col justify-end pb-28 md:pb-32">
-        <div key={`t${i}`} className="max-w-3xl">
-          <p className="animate-fade-up mb-6 text-xs font-bold uppercase tracking-[0.4em] text-cyan" style={{ "--d": "500ms" } as React.CSSProperties}>0{i + 1} / 03 — STUQ</p>
-          <h1 className="animate-fade-up text-5xl leading-[0.95] text-ivory sm:text-7xl lg:text-8xl" style={{ "--d": "700ms" } as React.CSSProperties}>{s.title}</h1>
-          <p className="animate-fade-up mt-6 max-w-xl text-lg text-ivory/85" style={{ "--d": "900ms" } as React.CSSProperties}>{s.text}</p>
+        <div key={`t${i}`} className="max-w-3xl drop-shadow-md">
+          <p className="animate-fade-up mb-6 text-xs font-bold uppercase tracking-[0.4em] text-cyan drop-shadow" style={{ "--d": "500ms" } as React.CSSProperties}>0{i + 1} / 03 — STUQ</p>
+          <h1 className="animate-fade-up text-5xl leading-[0.95] text-ivory drop-shadow-lg sm:text-7xl lg:text-8xl" style={{ "--d": "700ms" } as React.CSSProperties}>{s.title}</h1>
+          <p className="animate-fade-up mt-6 max-w-xl text-lg text-ivory drop-shadow" style={{ "--d": "900ms" } as React.CSSProperties}>{s.text}</p>
           <div className="animate-fade-up mt-10" style={{ "--d": "1100ms" } as React.CSSProperties}>
             <a href={s.href} className="btn-ghost-light">{s.cta} <ArrowRight className="h-4 w-4" /></a>
           </div>
@@ -63,29 +63,165 @@ export function Hero() {
 
 /* ---------------- ABOUT ---------------- */
 export function About() {
-  const [video, setVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
   const portfolios = [
-    { t: "Architecture Portfolio", d: "Residential, commercial, and contemporary architectural projects.", img: p1 },
-    { t: "Interior Design Portfolio", d: "Refined interiors, material palettes, and spatial experiences.", img: p2 },
-    { t: "Landscape Portfolio", d: "Outdoor environments, gardens, and integrated landscape concepts.", img: p4 },
+    {
+      t: "Architecture Portfolio",
+      d: "Residential, commercial, and contemporary architectural projects.",
+      img: p1,
+    },
+    {
+      t: "Interior Design Portfolio",
+      d: "Refined interiors, material palettes, and spatial experiences.",
+      img: p2,
+    },
+    {
+      t: "Landscape Portfolio",
+      d: "Outdoor environments, gardens, and integrated landscape concepts.",
+      img: p4,
+    },
   ];
+
   return (
     <section id="about" className="py-28 lg:py-40">
-      <Container className="grid gap-16 lg:grid-cols-[5fr_6fr] lg:gap-20">
-        <div>
-          <p data-reveal className="reveal eyebrow">About STUQ</p>
-          <h2 data-reveal className="reveal mt-6 text-4xl leading-tight md:text-6xl" style={{ "--d": "100ms" } as React.CSSProperties}>Designing Spaces. Defining Experiences.</h2>
-          <p data-reveal className="reveal mt-8 text-lg leading-relaxed text-muted-foreground" style={{ "--d": "200ms" } as React.CSSProperties}>
-            STUQ – Studio for Eclectic Architecture brings architecture, interiors, landscapes, and technical expertise together to create thoughtfully designed spaces. Our approach combines creative exploration, functional planning, material sensitivity, and attention to detail to shape environments that are meaningful to live and work in.
-          </p>
-          <div className="mt-12 space-y-3">
+      <Container>
+        {/* Top: Description (Left) + Autoplay Video (Right) */}
+        <div className="grid items-center gap-16 lg:grid-cols-[5fr_6fr] lg:gap-20">
+          <div>
+            <p data-reveal className="reveal eyebrow">About STUQ</p>
+            <h2 data-reveal className="reveal mt-6 text-4xl leading-tight md:text-6xl" style={{ "--d": "100ms" } as React.CSSProperties}>
+              Designing Spaces. Defining Experiences.
+            </h2>
+            <p data-reveal className="reveal mt-8 text-lg leading-relaxed text-muted-foreground" style={{ "--d": "200ms" } as React.CSSProperties}>
+              STUQ – Studio for Eclectic Architecture brings architecture, interiors, landscapes, and technical expertise together to create thoughtfully designed spaces. Our approach combines creative exploration, functional planning, material sensitivity, and attention to detail to shape environments that are meaningful to live and work in.
+            </p>
+            <div data-reveal className="reveal mt-10" style={{ "--d": "300ms" } as React.CSSProperties}>
+              <a href="#contact" className="btn-primary">
+                Book a Studio Consultation <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div data-reveal className="reveal-mask relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-teal-deep shadow-2xl">
+              <video
+                ref={videoRef}
+                src={studioVideo}
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                className="h-full w-full object-cover"
+              />
+
+              {/* Sound Control Button */}
+              <div className="absolute right-4 top-4 z-10">
+                <button
+                  type="button"
+                  onClick={toggleSound}
+                  aria-label={isMuted ? "Turn sound on" : "Mute sound"}
+                  className="flex items-center gap-2 rounded-full bg-teal-deep/85 px-3.5 py-2 text-xs font-semibold text-ivory shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-teal focus-visible:ring-2 focus-visible:ring-cyan"
+                >
+                  {isMuted ? (
+                    <>
+                      <VolumeX className="h-4 w-4 text-cyan" />
+                      <span>Unmute</span>
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 className="h-4 w-4 text-cyan" />
+                      <span>Sound On</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Bottom Video Bar */}
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-teal-deep/95 via-teal-deep/50 to-transparent p-4 text-ivory">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={togglePlay}
+                    aria-label={isPlaying ? "Pause video" : "Play video"}
+                    className="grid h-8 w-8 place-items-center rounded-full bg-teal text-ivory transition-transform hover:scale-110 hover:bg-cyan hover:text-teal-deep"
+                  >
+                    {isPlaying ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />}
+                  </button>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ivory/95">
+                    Studio for Eclectic Architecture
+                  </span>
+                </div>
+                <span className="text-[0.68rem] font-bold uppercase tracking-widest text-cyan">1080P HD</span>
+              </div>
+            </div>
+            <div className="mt-4 flex justify-between text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+              <span>Studio Film</span>
+              <span>Process · Craft · Space</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Portfolios in a Single Row */}
+        <div className="mt-20 border-t border-border pt-16 lg:mt-28">
+          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p data-reveal className="reveal eyebrow">Disciplines</p>
+              <h3 data-reveal className="reveal mt-3 text-3xl font-bold tracking-tight md:text-4xl" style={{ "--d": "100ms" } as React.CSSProperties}>
+                Our Portfolios
+              </h3>
+            </div>
+            <p data-reveal className="reveal max-w-md text-sm text-muted-foreground" style={{ "--d": "200ms" } as React.CSSProperties}>
+              Comprehensive design portfolios covering full-scale architectural structures, refined interiors, and harmonious landscapes.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
             {portfolios.map((p, n) => (
-              <div key={p.t} data-reveal className="reveal group flex items-center gap-5 border border-border bg-card p-3 transition-colors hover:border-teal" style={{ "--d": `${300 + n * 100}ms` } as React.CSSProperties}>
-                <div className="h-20 w-24 shrink-0 overflow-hidden"><img src={p.img} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" /></div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-semibold">{p.t}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{p.d}</p>
-                  <span className="mt-2 inline-flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.2em] text-teal" title="PDF will be available once supplied by the studio">
+              <div
+                key={p.t}
+                data-reveal
+                className="reveal group flex flex-col justify-between border border-border bg-card p-4 transition-all duration-300 hover:border-teal hover:shadow-xl"
+                style={{ "--d": `${200 + n * 120}ms` } as React.CSSProperties}
+              >
+                <div>
+                  <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+                    <img
+                      src={p.img}
+                      alt={p.t}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <h4 className="mt-5 font-display text-xl font-semibold">{p.t}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
+                </div>
+                <div className="mt-6 border-t border-border/70 pt-4">
+                  <span
+                    className="inline-flex items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-teal transition-colors group-hover:text-teal-deep"
+                    title="PDF will be available once supplied by the studio"
+                  >
                     <Download className="h-3.5 w-3.5" /> Download Portfolio — coming soon
                   </span>
                 </div>
@@ -93,32 +229,7 @@ export function About() {
             ))}
           </div>
         </div>
-        <div className="lg:pt-24">
-          <div data-reveal className="reveal-mask relative aspect-[16/10] overflow-hidden">
-            <img src={studio} alt="Architects working on models in the STUQ studio" loading="lazy" className="h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-teal-deep/25" />
-            <button onClick={() => setVideo(true)} aria-label="Play studio film" className="group absolute inset-0 grid place-items-center">
-              <span className="grid h-24 w-24 place-items-center rounded-full bg-teal text-ivory shadow-2xl transition-transform duration-500 group-hover:scale-110">
-                <Play className="ml-1 h-8 w-8 fill-current" />
-              </span>
-            </button>
-          </div>
-          <div className="mt-6 flex justify-between text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-            <span>Studio Film</span><span>Process · Craft · Space</span>
-          </div>
-        </div>
       </Container>
-      {video && (
-        <div className="fixed inset-0 z-[70] grid place-items-center bg-teal-deep/95 p-6" role="dialog" aria-modal="true" aria-label="Studio film" onClick={() => setVideo(false)}>
-          <button className="absolute right-6 top-6 grid h-12 w-12 place-items-center text-ivory" aria-label="Close video" onClick={() => setVideo(false)}><X /></button>
-          <div className="relative aspect-video w-full max-w-5xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <img src={studio} alt="" className="h-full w-full object-cover opacity-50" />
-            <div className="absolute inset-0 grid place-items-center text-center text-ivory">
-              <div><p className="eyebrow !text-cyan">Studio Film</p><p className="mt-4 font-display text-3xl">The STUQ studio film will play here.</p></div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

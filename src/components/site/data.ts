@@ -1,6 +1,6 @@
-import hero1 from "@/assets/hero-1.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.jpg";
+import heroSlider1 from "@/assets/hero-slider-1.jpg";
+import heroSlider2 from "@/assets/hero-slider-2.jpg";
+import heroSlider3 from "@/assets/hero-slider-3.jpg";
 import p1 from "@/assets/p1.jpg";
 import p2 from "@/assets/p2.jpg";
 import p3 from "@/assets/p3.jpg";
@@ -19,9 +19,30 @@ export const NAV = [
 ];
 
 export const SLIDES = [
-  { img: hero1, title: "Spaces Designed to Inspire.", text: "Architecture shaped by creativity, precision, and purpose.", cta: "Explore Our Projects", href: "#projects", alt: "Sculptural concrete and glass residence at dusk" },
-  { img: hero2, title: "Beyond Interiors. Experiences.", text: "Thoughtfully designed interiors that balance aesthetics and everyday living.", cta: "Discover Our Approach", href: "#about", alt: "Naturally lit contemporary living room with travertine fireplace" },
-  { img: hero3, title: "Architecture in Harmony with Nature.", text: "Creating meaningful connections between people, buildings, and their surroundings.", cta: "Start Your Project", href: "#contact", alt: "Modern residence opening onto landscaped gardens and a reflecting pool" },
+  {
+    img: heroSlider1,
+    title: "Spaces Designed to Inspire.",
+    text: "Architecture shaped by creativity, precision, and purposeful structural innovation.",
+    cta: "Explore Our Projects",
+    href: "#projects",
+    alt: "Sculptural multi-story architectural landmark with dynamic curved balconies at dusk",
+  },
+  {
+    img: heroSlider2,
+    title: "Grand Entrances. Lasting Impressions.",
+    text: "Master-planned residential communities, monumental portals, and integrated landscape environments.",
+    cta: "Discover Our Approach",
+    href: "#about",
+    alt: "Vedanta by Gayatri Developers grand entrance archway and landscaped boulevard at sunset",
+  },
+  {
+    img: heroSlider3,
+    title: "Architecture in Harmony with Nature.",
+    text: "Creating meaningful connections between people, buildings, and their surroundings.",
+    cta: "Start Your Project",
+    href: "#contact",
+    alt: "Contemporary parametric tower reflecting natural light and urban vitality",
+  },
 ];
 
 export const PROJECTS = [
@@ -53,9 +74,41 @@ export const FAQS = [
   { q: "How can I request a project estimate?", a: "Share your project details through the consultation form. After understanding the scope, we prepare a tailored proposal." },
 ];
 
-export const SOCIALS = [
-  { name: "Instagram", href: "#" },
-  { name: "Pinterest", href: "#" },
-  { name: "LinkedIn", href: "#" },
-  { name: "Facebook", href: "#" },
+export interface SocialItem {
+  name: "Instagram" | "Pinterest" | "LinkedIn" | "Facebook";
+  href: string;
+  brandColor: string;
+  bgClass: string;
+  hoverBgClass: string;
+}
+
+export const SOCIALS: SocialItem[] = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com",
+    brandColor: "#E1306C",
+    bgClass: "bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]",
+    hoverBgClass: "hover:brightness-110",
+  },
+  {
+    name: "Pinterest",
+    href: "https://pinterest.com",
+    brandColor: "#E60023",
+    bgClass: "bg-[#E60023]",
+    hoverBgClass: "hover:bg-[#cc001f]",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com",
+    brandColor: "#0A66C2",
+    bgClass: "bg-[#0A66C2]",
+    hoverBgClass: "hover:bg-[#084e96]",
+  },
+  {
+    name: "Facebook",
+    href: "https://facebook.com",
+    brandColor: "#1877F2",
+    bgClass: "bg-[#1877F2]",
+    hoverBgClass: "hover:bg-[#1465d2]",
+  },
 ];
