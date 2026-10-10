@@ -46,12 +46,48 @@ export const SLIDES = [
 ];
 
 export const PROJECTS = [
-  { img: p1, title: "Contemporary Residence", cat: "Architecture", concept: "Pure white volumes softened by timber screens that filter light and frame privacy." },
-  { img: p2, title: "Luxury Interior", cat: "Interior Design", concept: "A layered composition of veined stone, brass and soft curves above the city." },
-  { img: p3, title: "Modern Villa", cat: "Architecture", concept: "A low horizontal pavilion that dissolves into the horizon through an infinity edge." },
-  { img: p4, title: "Landscape & Outdoor Living", cat: "Landscape", concept: "Native planting, stepping stones and a timber pergola for unhurried outdoor life." },
-  { img: p5, title: "Commercial Architecture", cat: "Commercial", concept: "A rhythmic façade of vertical fins balancing daylight, shade and identity." },
-  { img: p6, title: "Bespoke Residential Interiors", cat: "Interior Design", concept: "Custom joinery and warm, concealed lighting crafting a quiet retreat." },
+  {
+    img: p1,
+    title: "Modern Residence",
+    cat: "Architecture",
+    loc: "Vijayawada",
+    concept: "Pure white volumes softened by timber screens that filter light and frame privacy.",
+  },
+  {
+    img: p2,
+    title: "Luxury Sky Penthouse",
+    cat: "Interior Design",
+    loc: "Hyderabad",
+    concept: "A layered composition of veined stone, brass and soft curves above the city.",
+  },
+  {
+    img: p3,
+    title: "Modern Horizon Villa",
+    cat: "Architecture",
+    loc: "Bengaluru",
+    concept: "A low horizontal pavilion that dissolves into the horizon through an infinity edge.",
+  },
+  {
+    img: p4,
+    title: "Landscape & Outdoor Living",
+    cat: "Landscape",
+    loc: "Amaravati",
+    concept: "Native planting, stepping stones and a timber pergola for unhurried outdoor life.",
+  },
+  {
+    img: p5,
+    title: "Commercial Landmark",
+    cat: "Commercial",
+    loc: "Visakhapatnam",
+    concept: "A rhythmic façade of vertical fins balancing daylight, shade and identity.",
+  },
+  {
+    img: p6,
+    title: "Bespoke Residence Interiors",
+    cat: "Interior Design",
+    loc: "Guntur",
+    concept: "Custom joinery and warm, concealed lighting crafting a quiet retreat.",
+  },
 ];
 
 export const SERVICES = [

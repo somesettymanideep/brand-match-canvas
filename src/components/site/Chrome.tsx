@@ -51,8 +51,8 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-10">
-        <a href="#home" className="shrink-0 rounded-sm bg-ivory/95 px-3 py-1.5" aria-label="STUQ home">
-          <img src={logo} alt="STUQ – Studio for Eclectic Architecture" className={`w-auto transition-all duration-500 ${scrolled ? "h-8" : "h-10"}`} />
+        <a href="#home" className="shrink-0 overflow-hidden rounded-[5px] bg-ivory/95 px-3.5 py-1.5 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-md" aria-label="STUQ home">
+          <img src={logo} alt="STUQ – Studio for Eclectic Architecture" className={`w-auto rounded-[5px] transition-all duration-500 ${scrolled ? "h-8" : "h-10"}`} />
         </a>
         <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
           {NAV.map((n) => (
@@ -126,19 +126,107 @@ export function SocialRail() {
 
 export function BackToTop() {
   const [show, setShow] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
-    const on = () => setShow(window.scrollY > window.innerHeight * 0.9);
-    window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setScrollProgress(progress);
+      setShow(scrollTop > 240);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const radius = 22;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (scrollProgress / 100) * circumference;
+
   return (
-    <button
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      aria-label="Back to top"
-      className={`fixed bottom-6 right-6 z-40 grid h-12 w-12 place-items-center bg-teal text-cyan shadow-lg transition-all duration-500 hover:bg-teal-deep ${show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"}`}
+    <div
+      className={`fixed bottom-7 right-7 z-40 transition-all duration-500 ease-out ${
+        show ? "translate-y-0 opacity-100 scale-100" : "pointer-events-none translate-y-8 opacity-0 scale-90"
+      }`}
     >
-      <ArrowUp className="h-5 w-5" />
-    </button>
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Scroll back to top - Elevation Level 00"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-[#032a31]/90 p-0 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-[#043c46] hover:shadow-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+      >
+        {/* Architectural Crosshair / Registration L-Corner Marks on Hover */}
+        <span className="pointer-events-none absolute -inset-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/60" />
+          <span className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/60" />
+          <span className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/60" />
+          <span className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/60" />
+        </span>
+
+        {/* Technical Circular Dial & Scroll Progress SVG */}
+        <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 56 56">
+          {/* Background Blueprint Track */}
+          <circle
+            cx="28"
+            cy="28"
+            r={radius}
+            fill="none"
+            stroke="#164e58"
+            strokeWidth="1.5"
+            strokeDasharray="2 3"
+          />
+
+          {/* Active Architectural Progress Ring */}
+          <circle
+            cx="28"
+            cy="28"
+            r={radius}
+            fill="none"
+            stroke="#2dd4bf"
+            strokeWidth="2"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            className="transition-all duration-150 ease-out"
+          />
+
+          {/* Compass 4-Axis Cardinal Marks */}
+          <line x1="28" y1="2" x2="28" y2="5" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" />
+          <line x1="28" y1="51" x2="28" y2="54" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" />
+          <line x1="2" y1="28" x2="5" y2="28" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" />
+          <line x1="51" y1="28" x2="54" y2="28" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+
+        {/* Center Architectural Elevation Arrow + Level Indicator */}
+        <div className="relative z-10 flex flex-col items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5">
+          {/* Custom Architectural Drafting Elevation Arrow */}
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4 stroke-cyan transition-colors duration-300 group-hover:stroke-white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* Elevation Arrow Apex & Center Plumb Line */}
+            <path d="M12 3L4 11h5v9h6v-9h5L12 3z" fill="currentColor" fillOpacity="0.15" />
+            <line x1="12" y1="3" x2="12" y2="20" strokeDasharray="1.5 1.5" strokeWidth="1" opacity="0.6" />
+          </svg>
+
+          {/* Monospace Drafting Coordinate Text */}
+          <span className="mt-0.5 font-mono text-[8px] font-bold tracking-widest text-[#a3cbcf] group-hover:text-cyan">
+            TOP
+          </span>
+        </div>
+
+        {/* Floating Tooltip Pill */}
+        <span className="pointer-events-none absolute bottom-full mb-2.5 hidden rounded border border-cyan/30 bg-[#032a31]/95 px-2.5 py-1 text-[9px] font-mono font-semibold tracking-wider text-cyan shadow-lg backdrop-blur-md transition-all group-hover:block whitespace-nowrap">
+          ▲ LVL 00.00
+        </span>
+      </button>
+    </div>
   );
 }
 
@@ -202,7 +290,9 @@ export function Footer() {
         </div>
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="inline-block rounded-sm bg-ivory px-3 py-2"><img src={logo} alt="STUQ logo" className="h-10 w-auto" loading="lazy" /></div>
+            <div className="inline-block overflow-hidden rounded-[5px] bg-ivory px-3.5 py-2 shadow-sm">
+              <img src={logo} alt="STUQ logo" className="h-10 w-auto rounded-[5px]" loading="lazy" />
+            </div>
             <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Studio for Eclectic Architecture</p>
             <p className="mt-3 text-sm leading-relaxed">Architecture, interiors, landscapes and technical expertise brought together to create thoughtfully designed spaces.</p>
             <div className="mt-6 flex gap-2.5">
