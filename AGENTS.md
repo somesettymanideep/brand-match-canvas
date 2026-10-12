@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep banner-image pixel transitions in the browser-safe PixelSwap component, controlled by the slideshow; this preserves one animation path for autoplay, arrows, and slide selectors.
