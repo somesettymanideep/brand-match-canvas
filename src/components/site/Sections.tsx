@@ -29,13 +29,6 @@ import {
   Building2,
   ChevronDown,
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Observer } from "gsap/Observer";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, Observer);
-}
 import { SLIDES, PROJECTS, SERVICES, FAQS } from "./data";
 import studio from "@/assets/studio.jpg";
 import studioVideo from "@/assets/studio-video.mp4";
@@ -512,431 +505,7 @@ export function Vastu() {
   );
 }
 
-/* ---------------- PROJECTS (Vertical Slide-Down Animation with Immediate Scroll Reveal) ---------------- */
-export function Projects() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  // Synchronous refs for smooth scroll handling without delays
-  const activeIdxRef = useRef(0);
-  const isLockedRef = useRef(false);
-  const animTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    activeIdxRef.current = activeIdx;
-  }, [activeIdx]);
-
-  // Navigate to slide with responsive 600ms slide-down animation (no delay lock)
-  const goToSlide = useCallback((targetIdx: number) => {
-    if (targetIdx === activeIdxRef.current || isLockedRef.current) return;
-    if (targetIdx < 0 || targetIdx >= PROJECTS.length) return;
-
-    if (animTimerRef.current) clearTimeout(animTimerRef.current);
-
-    isLockedRef.current = true;
-    setIsAnimating(true);
-    setActiveIdx(targetIdx);
-    activeIdxRef.current = targetIdx;
-
-    // Fast, responsive 500ms debounce while the slide moves
-    animTimerRef.current = setTimeout(() => {
-      setIsAnimating(false);
-      isLockedRef.current = false;
-    }, 500);
-  }, []);
-
-  // GSAP ScrollTrigger pinning and responsive scroll listeners
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        pin: pinnedRef.current,
-        start: "top top",
-        end: `+=${PROJECTS.length * 600}`,
-        scrub: false,
-      });
-    }, sectionRef);
-
-    let wheelDelta = 0;
-    let wheelResetTimer: NodeJS.Timeout | null = null;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
-      if (!isVisible) return;
-
-      const currentIdx = activeIdxRef.current;
-      const isLocked = isLockedRef.current;
-
-      // Downward scroll
-      if (e.deltaY > 0) {
-        if (currentIdx < PROJECTS.length - 1) {
-          e.preventDefault();
-          if (!isLocked) {
-            wheelDelta += e.deltaY;
-            if (Math.abs(wheelDelta) > 20) {
-              wheelDelta = 0;
-              goToSlide(currentIdx + 1);
-            }
-          }
-        }
-        // When on the final project, natural scroll immediately continues down to next section
-      }
-      // Upward scroll
-      else if (e.deltaY < 0) {
-        if (currentIdx > 0) {
-          e.preventDefault();
-          if (!isLocked) {
-            wheelDelta += e.deltaY;
-            if (Math.abs(wheelDelta) > 20) {
-              wheelDelta = 0;
-              goToSlide(currentIdx - 1);
-            }
-          }
-        }
-        // When on the first project, natural scroll immediately continues up to previous section
-      }
-
-      if (wheelResetTimer) clearTimeout(wheelResetTimer);
-      wheelResetTimer = setTimeout(() => {
-        wheelDelta = 0;
-      }, 150);
-    };
-
-    // Touch gesture handling
-    let touchStartY = 0;
-    let touchStartX = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
-      if (!isVisible) return;
-
-      const touchEndY = e.touches[0].clientY;
-      const touchEndX = e.touches[0].clientX;
-      const deltaY = touchStartY - touchEndY;
-      const deltaX = touchStartX - touchEndX;
-
-      if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
-        const currentIdx = activeIdxRef.current;
-        const isLocked = isLockedRef.current;
-
-        if (deltaY > 0) {
-          // Swipe up (navigate down)
-          if (currentIdx < PROJECTS.length - 1) {
-            e.preventDefault();
-            if (!isLocked) {
-              touchStartY = touchEndY;
-              goToSlide(currentIdx + 1);
-            }
-          }
-        } else if (deltaY < 0) {
-          // Swipe down (navigate up)
-          if (currentIdx > 0) {
-            e.preventDefault();
-            if (!isLocked) {
-              touchStartY = touchEndY;
-              goToSlide(currentIdx - 1);
-            }
-          }
-        }
-      }
-    };
-
-    // Keyboard navigation
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
-      if (!isVisible) return;
-
-      const currentIdx = activeIdxRef.current;
-      const isLocked = isLockedRef.current;
-
-      if (e.key === "ArrowDown" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
-        if (currentIdx < PROJECTS.length - 1) {
-          e.preventDefault();
-          if (!isLocked) goToSlide(currentIdx + 1);
-        }
-      } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
-        if (currentIdx > 0) {
-          e.preventDefault();
-          if (!isLocked) goToSlide(currentIdx - 1);
-        }
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: false });
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      ctx.revert();
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("keydown", handleKeyDown);
-      if (animTimerRef.current) clearTimeout(animTimerRef.current);
-      if (wheelResetTimer) clearTimeout(wheelResetTimer);
-    };
-  }, [goToSlide]);
-
-  return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="relative bg-[#F8FBFB]"
-      style={{ minHeight: `${PROJECTS.length * 90 + 30}vh` }}
-    >
-      {/* Sticky Viewport Container */}
-      <div
-        ref={pinnedRef}
-        className="sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden py-6 sm:py-10"
-      >
-        {/* Ambient Architectural Lighting Mesh */}
-        <div className="pointer-events-none absolute -top-32 -left-32 h-[450px] w-[450px] rounded-full bg-[#35A9C1]/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-[#007C91]/10 blur-3xl" />
-
-        {/* Floating butterfly graphic at top right */}
-        <div className="pointer-events-none absolute right-12 top-8 z-20 hidden md:block">
-          <svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true">
-            <g className="wing-l">
-              <path d="M20 20 C10 4, 0 10, 6 20 C0 30, 10 34, 20 22Z" fill="#007C91" opacity=".85" />
-            </g>
-            <g className="wing-r">
-              <path d="M20 20 C30 4, 40 10, 34 20 C40 30, 30 34, 20 22Z" fill="#35A9C1" opacity=".9" />
-            </g>
-            <rect x="19" y="13" width="2" height="16" rx="1" fill="#172B35" />
-          </svg>
-        </div>
-
-        <div className="mx-auto w-full max-w-[1400px] px-6 lg:px-12 flex flex-col justify-center h-full gap-4 sm:gap-6 relative z-10">
-          {/* ================= 1. TOP HEADER ================= */}
-          <div className="text-center max-w-3xl mx-auto shrink-0">
-            {/* Centered Eyebrow */}
-            <div className="flex items-center justify-center gap-2">
-              <span className="h-[1.5px] w-6 bg-[#007C91]" />
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#007C91]">
-                OUR PROJECTS
-              </p>
-              <span className="h-[1.5px] w-6 bg-[#007C91]" />
-            </div>
-
-            {/* Main Heading */}
-            <h2 className="mt-2 font-serif text-3xl sm:text-4xl md:text-[2.65rem] font-normal tracking-tight text-[#172B35] leading-tight">
-              A Journey Through Our Projects
-            </h2>
-
-            {/* Subtitle Paragraph */}
-            <p className="mt-2 text-xs sm:text-sm text-[#597080] max-w-2xl mx-auto leading-relaxed">
-              Explore our diverse portfolio of architectural, interior, and landscape landmarks crafted with creativity, precision, and purpose.
-            </p>
-          </div>
-
-          {/* ================= 2. SLIDING SHOWCASE DECK WITH VERTICAL PROGRESS ================= */}
-          <div className="relative w-full max-w-[1300px] mx-auto shrink-0 flex items-center gap-5 sm:gap-7">
-            {/* Vertical Progress Pillar (Brand Colors: #007C91, #35A9C1, #E9F3F4) */}
-            <div className="hidden md:flex flex-col items-center gap-2 shrink-0 py-2">
-              <span className="font-mono text-[11px] font-bold text-[#007C91]">
-                0{activeIdx + 1}
-              </span>
-              <div className="relative h-44 w-1.5 rounded-full bg-[#E9F3F4] overflow-hidden">
-                <div
-                  className="absolute top-0 left-0 w-full rounded-full bg-gradient-to-b from-[#35A9C1] to-[#007C91] transition-all duration-500 ease-out"
-                  style={{
-                    height: `${((activeIdx + 1) / PROJECTS.length) * 100}%`,
-                  }}
-                />
-              </div>
-              <span className="font-mono text-[11px] font-medium text-slate-400">
-                0{PROJECTS.length}
-              </span>
-            </div>
-
-            {/* Main Outer Deck Viewport */}
-            <div className="group relative aspect-[16/10] sm:aspect-[2/1] lg:aspect-[2.35/1] max-h-[500px] w-full overflow-hidden rounded-[26px] bg-[#0c181f] shadow-2xl ring-1 ring-black/15 flex-1">
-              {/* Vertical Stack with 600ms Slide-Down and Scale Transform */}
-              {PROJECTS.map((p, idx) => {
-                const isActive = idx === activeIdx;
-
-                // Slide-down positioning:
-                // - Active slide is at translateY(0)
-                // - Preceding slides have slid down out to translateY(100%)
-                // - Succeeding slides wait above at translateY(-100%) to slide down
-                let translateY = "0%";
-                if (idx < activeIdx) {
-                  translateY = "100%";
-                } else if (idx > activeIdx) {
-                  translateY = "-100%";
-                }
-
-                return (
-                  <div
-                    key={p.title}
-                    className="absolute inset-0 h-full w-full overflow-hidden will-change-transform transform-gpu"
-                    style={{
-                      transform: `translateY(${translateY})`,
-                      transition: "transform 600ms cubic-bezier(0.22, 1, 0.36, 1)",
-                      zIndex: isActive ? 10 : 5,
-                      pointerEvents: isActive ? "auto" : "none",
-                    }}
-                  >
-                    {/* Slide Image with 1.05 -> 1.0 Scale & Opacity */}
-                    <img
-                      src={p.img}
-                      alt={p.title}
-                      loading={idx === 0 ? "eager" : "lazy"}
-                      className="h-full w-full object-cover will-change-transform select-none transform-gpu"
-                      style={{
-                        transform: isActive ? "scale(1.0)" : "scale(1.05)",
-                        opacity: isActive ? 1 : 0.65,
-                        transition:
-                          "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 250ms ease-out",
-                      }}
-                    />
-
-                    {/* Premium Architectural Vignette Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/15" />
-
-                    {/* Top Watermark Badge */}
-                    <div className="absolute top-6 left-6 z-10">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/45 px-3.5 py-1 text-xs font-mono font-bold tracking-widest text-[#35A9C1] backdrop-blur-md">
-                        <span>0{idx + 1}</span>
-                        <span className="text-white/40">/</span>
-                        <span className="text-white/70">0{PROJECTS.length}</span>
-                      </span>
-                    </div>
-
-                    {/* Bottom Overlay Content with Smooth Text Reveal */}
-                    <div
-                      className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end p-6 sm:p-8"
-                      style={{
-                        opacity: isActive ? 1 : 0,
-                        transform: isActive ? "translateY(0)" : "translateY(18px)",
-                        transition:
-                          "opacity 400ms cubic-bezier(0.22, 1, 0.36, 1) 150ms, transform 400ms cubic-bezier(0.22, 1, 0.36, 1) 150ms",
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="rounded-md bg-[#007C91] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-                          {p.cat}
-                        </span>
-                        <span className="text-xs text-white/80 font-medium">
-                          {p.loc}
-                        </span>
-                      </div>
-
-                      <h3 className="mt-2 font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-white">
-                        {p.title}
-                      </h3>
-
-                      {p.concept && (
-                        <p className="mt-1.5 max-w-xl text-xs sm:text-sm leading-relaxed text-white/85 line-clamp-2">
-                          {p.concept}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Status Pill: Project Counter & Guide */}
-              <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/45 px-3.5 py-1 text-xs font-medium text-white/90 backdrop-blur-md">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#35A9C1]" />
-                  <span>Project 0{activeIdx + 1} of 0{PROJECTS.length}</span>
-                </div>
-              </div>
-
-              {/* Floating Navigation Arrow Controls */}
-              <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => goToSlide(activeIdx - 1)}
-                  disabled={activeIdx === 0 || isAnimating}
-                  aria-label="Previous project"
-                  className={`grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur-md transition-all ${
-                    activeIdx === 0 || isAnimating
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:scale-110 hover:bg-white hover:text-[#172B35]"
-                  }`}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToSlide(activeIdx + 1)}
-                  disabled={activeIdx === PROJECTS.length - 1 || isAnimating}
-                  aria-label="Next project"
-                  className={`grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur-md transition-all ${
-                    activeIdx === PROJECTS.length - 1 || isAnimating
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:scale-110 hover:bg-white hover:text-[#172B35]"
-                  }`}
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ================= 3. UNDER IMAGES: Segmented Progress & View All Button ================= */}
-          <div className="mt-2 flex flex-col sm:flex-row items-center justify-between gap-4 w-full max-w-[1300px] mx-auto shrink-0">
-            {/* Progress Segmented Track */}
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <span className="font-mono text-xs font-bold text-[#007C91]">0{activeIdx + 1}</span>
-              <div className="flex gap-2">
-                {PROJECTS.map((p, idx) => {
-                  const isCurrent = idx === activeIdx;
-                  return (
-                    <button
-                      key={p.title}
-                      onClick={() => goToSlide(idx)}
-                      disabled={isAnimating}
-                      aria-label={`Slide to project ${idx + 1}: ${p.title}`}
-                      className="group py-2 disabled:cursor-not-allowed"
-                    >
-                      <span
-                        className={`block h-1.5 rounded-full transition-all duration-400 ${
-                          isCurrent
-                            ? "w-10 bg-[#007C91]"
-                            : "w-3 bg-slate-200 group-hover:bg-[#35A9C1]/50"
-                        }`}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-              <span className="font-mono text-xs text-slate-400">0{PROJECTS.length}</span>
-            </div>
-
-            {/* View All Projects Button */}
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 rounded-full bg-[#007C91] px-7 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-[#007C91]/20 transition-all duration-300 hover:bg-[#006375] hover:shadow-xl hover:scale-105"
-            >
-              <span>View All Projects</span>
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+export { Projects } from "./Projects";
 
 /* ---------------- SERVICE ICONS ---------------- */
 const ServiceArchIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
@@ -1372,19 +941,19 @@ export function Contact() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim() || formData.name.trim().length < 2) {
-      newErrors.name = "Please enter your full name.";
+      newErrors["name"] = "Please enter your full name.";
     }
     if (!/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address.";
+      newErrors["email"] = "Please enter a valid email address.";
     }
     if (!/^[+\d\s()-]{7,}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Please enter a valid phone number.";
+      newErrors["phone"] = "Please enter a valid phone number.";
     }
     if (!formData.type) {
-      newErrors.type = "Please select a project type.";
+      newErrors["type"] = "Please select a project type.";
     }
     if (!formData.consent) {
-      newErrors.consent = "Please agree to be contacted.";
+      newErrors["consent"] = "Please agree to be contacted.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -1511,11 +1080,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="e.g. Rahul Sharma"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.name ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["name"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.name && <p className="mt-1.5 text-xs text-red-500">{errors.name}</p>}
+                    {errors["name"] && <p className="mt-1.5 text-xs text-red-500">{errors["name"]}</p>}
                   </div>
 
                   {/* Email Address */}
@@ -1532,11 +1101,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="e.g. rahul@example.com"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.email ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["email"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.email && <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>}
+                    {errors["email"] && <p className="mt-1.5 text-xs text-red-500">{errors["email"]}</p>}
                   </div>
 
                   {/* Phone Number */}
@@ -1553,11 +1122,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="+91 98765 43210"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.phone ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["phone"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.phone && <p className="mt-1.5 text-xs text-red-500">{errors.phone}</p>}
+                    {errors["phone"] && <p className="mt-1.5 text-xs text-red-500">{errors["phone"]}</p>}
                   </div>
 
                   {/* Project Type */}
@@ -1572,7 +1141,7 @@ export function Contact() {
                         value={formData.type}
                         onChange={handleChange}
                         className={`w-full appearance-none rounded-[14px] bg-slate-50/70 border px-4 py-3.5 pr-10 text-sm text-[#172B35] outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.type ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["type"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         } ${!formData.type ? "text-slate-400" : "text-[#172B35]"}`}
                       >
                         <option value="" disabled>Select project type</option>
@@ -1584,7 +1153,7 @@ export function Contact() {
                       </select>
                       <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     </div>
-                    {errors.type && <p className="mt-1.5 text-xs text-red-500">{errors.type}</p>}
+                    {errors["type"] && <p className="mt-1.5 text-xs text-red-500">{errors["type"]}</p>}
                   </div>
 
                   {/* Project Location */}
@@ -1657,8 +1226,8 @@ export function Contact() {
                         I agree to be contacted by Studio for Eclectic Architecture (SEA) regarding my inquiry.
                       </span>
                     </label>
-                    {errors.consent && (
-                      <p className="mt-1 text-xs text-red-500">{errors.consent}</p>
+                    {errors["consent"] && (
+                      <p className="mt-1 text-xs text-red-500">{errors["consent"]}</p>
                     )}
                   </div>
 
