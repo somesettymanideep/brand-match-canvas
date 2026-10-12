@@ -171,7 +171,7 @@ function PixelSwap({
   style
 }: PixelSwapProps) {
   const [internalActive, setInternalActive] = useState(initialActive);
-  const [shownActive, setShownActive] = useState(active ?? initialActive);
+  const [shownActive, setShownActive] = useState(initialActive);
   const [transition, setTransition] = useState<{ to: boolean; grid: ReturnType<typeof buildGrid> } | null>(null);
   const [box, setBox] = useState({ width: 0, height: 0 });
 
@@ -235,9 +235,9 @@ function PixelSwap({
   useEffect(() => stopAnimations, [stopAnimations]);
 
   useEffect(() => {
-    if (transition || desiredActive === shownActive) return;
+    if (transition || desiredActive === shownActive || !box.width || !box.height) return;
     setTransition({ to: desiredActive, grid: gridRef.current });
-  }, [desiredActive, shownActive, transition]);
+  }, [desiredActive, shownActive, transition, box.width, box.height]);
 
   useEffect(() => {
     if (!transition) return;
@@ -291,7 +291,8 @@ function PixelSwap({
       content.style.transformOrigin = `${originX}px ${originY}px`;
 
       const clone = source.cloneNode(true);
-      (clone as HTMLElement).dataset['visible'] = 'true';
+      if (!(clone instanceof HTMLElement)) return;
+      clone.dataset['visible'] = 'true';
       clone.removeAttribute('aria-hidden');
       content.appendChild(clone);
       pixelElement.replaceChildren(content);
