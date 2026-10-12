@@ -941,19 +941,19 @@ export function Contact() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim() || formData.name.trim().length < 2) {
-      newErrors.name = "Please enter your full name.";
+      newErrors["name"] = "Please enter your full name.";
     }
     if (!/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address.";
+      newErrors["email"] = "Please enter a valid email address.";
     }
     if (!/^[+\d\s()-]{7,}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Please enter a valid phone number.";
+      newErrors["phone"] = "Please enter a valid phone number.";
     }
     if (!formData.type) {
-      newErrors.type = "Please select a project type.";
+      newErrors["type"] = "Please select a project type.";
     }
     if (!formData.consent) {
-      newErrors.consent = "Please agree to be contacted.";
+      newErrors["consent"] = "Please agree to be contacted.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -1080,11 +1080,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="e.g. Rahul Sharma"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.name ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["name"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.name && <p className="mt-1.5 text-xs text-red-500">{errors.name}</p>}
+                    {errors["name"] && <p className="mt-1.5 text-xs text-red-500">{errors["name"]}</p>}
                   </div>
 
                   {/* Email Address */}
@@ -1101,11 +1101,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="e.g. rahul@example.com"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.email ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["email"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.email && <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>}
+                    {errors["email"] && <p className="mt-1.5 text-xs text-red-500">{errors["email"]}</p>}
                   </div>
 
                   {/* Phone Number */}
@@ -1122,11 +1122,11 @@ export function Contact() {
                         onChange={handleChange}
                         placeholder="+91 98765 43210"
                         className={`w-full rounded-[14px] bg-slate-50/70 border px-4 py-3.5 text-sm text-[#172B35] placeholder:text-slate-400 outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.phone ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["phone"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         }`}
                       />
                     </div>
-                    {errors.phone && <p className="mt-1.5 text-xs text-red-500">{errors.phone}</p>}
+                    {errors["phone"] && <p className="mt-1.5 text-xs text-red-500">{errors["phone"]}</p>}
                   </div>
 
                   {/* Project Type */}
@@ -1141,7 +1141,7 @@ export function Contact() {
                         value={formData.type}
                         onChange={handleChange}
                         className={`w-full appearance-none rounded-[14px] bg-slate-50/70 border px-4 py-3.5 pr-10 text-sm text-[#172B35] outline-none transition-all duration-300 focus:bg-white focus:border-[#007C91] focus:ring-4 focus:ring-[#007C91]/10 ${
-                          errors.type ? "border-red-400 bg-red-50/20" : "border-slate-200"
+                          errors["type"] ? "border-red-400 bg-red-50/20" : "border-slate-200"
                         } ${!formData.type ? "text-slate-400" : "text-[#172B35]"}`}
                       >
                         <option value="" disabled>Select project type</option>
@@ -1153,7 +1153,7 @@ export function Contact() {
                       </select>
                       <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     </div>
-                    {errors.type && <p className="mt-1.5 text-xs text-red-500">{errors.type}</p>}
+                    {errors["type"] && <p className="mt-1.5 text-xs text-red-500">{errors["type"]}</p>}
                   </div>
 
                   {/* Project Location */}
@@ -1226,8 +1226,8 @@ export function Contact() {
                         I agree to be contacted by Studio for Eclectic Architecture (SEA) regarding my inquiry.
                       </span>
                     </label>
-                    {errors.consent && (
-                      <p className="mt-1 text-xs text-red-500">{errors.consent}</p>
+                    {errors["consent"] && (
+                      <p className="mt-1 text-xs text-red-500">{errors["consent"]}</p>
                     )}
                   </div>
 
