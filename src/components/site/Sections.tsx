@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatedContent } from "@/components/site/AnimatedContent";
 import {
   ArrowRight,
   ArrowLeft,
