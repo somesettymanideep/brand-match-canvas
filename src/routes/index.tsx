@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRevealAll } from "@/hooks/use-reveal";
-import { Header, SocialRail, BackToTop, ButterflyCursor, Footer } from "@/components/site/Chrome";
+import { Header, SocialRail, BackToTop, ArchitectureCursor, Footer } from "@/components/site/Chrome";
 import { Hero, About, Vastu, Projects, Services, Testimonials, Contact } from "@/components/site/Sections";
 
 const TITLE = "STUQ – Studio for Eclectic Architecture";
@@ -49,7 +49,7 @@ function Index() {
       </main>
       <Footer />
       <BackToTop />
-      <ButterflyCursor />
+      <ArchitectureCursor />
     </>
   );
 }
