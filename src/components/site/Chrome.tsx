@@ -240,10 +240,10 @@ export function ArchitectureCursor() {
       const active = fine.matches && !reduced.matches;
       setEnabled(active);
       document.documentElement.classList.remove("drafting-cursor-active");
-      if (ref.current) ref.current.dataset.visible = "false";
+      if (ref.current) ref.current.dataset['visible'] = "false";
     };
     const hide = () => {
-      if (ref.current) ref.current.dataset.visible = "false";
+      if (ref.current) ref.current.dataset['visible'] = "false";
       document.documentElement.classList.remove("drafting-cursor-active");
     };
     const move = (event: PointerEvent) => {
@@ -255,12 +255,12 @@ export function ArchitectureCursor() {
         return;
       }
       cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-      cursor.dataset.visible = "true";
-      cursor.dataset.interactive = String(Boolean(target?.closest('a, button, [role="button"]')));
+      cursor.dataset['visible'] = "true";
+      cursor.dataset['interactive'] = String(Boolean(target?.closest('a, button, [role="button"]')));
       document.documentElement.classList.add("drafting-cursor-active");
     };
-    const press = () => { if (ref.current) ref.current.dataset.pressed = "true"; };
-    const release = () => { if (ref.current) ref.current.dataset.pressed = "false"; };
+    const press = () => { if (ref.current) ref.current.dataset['pressed'] = "true"; };
+    const release = () => { if (ref.current) ref.current.dataset['pressed'] = "false"; };
     sync();
     fine.addEventListener("change", sync);
     reduced.addEventListener("change", sync);
