@@ -65,7 +65,7 @@ export interface ScrollStackProps {
   smoothScroll?: boolean;
   snap?: boolean;
   useWindowScroll?: boolean;
-  onStackComplete?: () => void;
+  onStackComplete?: (() => void) | undefined;
 }
 
 interface StackSettings {
@@ -81,7 +81,7 @@ interface StackSettings {
   holdDistance: number;
   smoothScroll: boolean;
   snap: boolean;
-  onStackComplete?: () => void;
+  onStackComplete?: (() => void) | undefined;
 }
 
 const ScrollStack = ({
@@ -190,7 +190,7 @@ const ScrollStack = ({
       const padTop = windowed ? 0 : stackTop;
       const endHeight =
         settings.holdDistance +
-        (windowed ? 0 : Math.max(0, viewHeight - lastPin - heights[heights.length - 1]));
+        (windowed ? 0 : Math.max(0, viewHeight - lastPin - (heights[heights.length - 1] ?? 0)));
 
       let moved = write("padTop", padTop, (value) => {
         inner.style.paddingTop = `${value as number}px`;
@@ -206,16 +206,16 @@ const ScrollStack = ({
         flow += height + settings.itemDistance;
         return point;
       });
-      reach = Math.max(40, (heights[0] + settings.itemDistance - offset) / 2);
+      reach = Math.max(40, ((heights[0] ?? 0) + settings.itemDistance - offset) / 2);
 
       const depths = slots.map(() => 0);
       let lastCover = 0;
       for (let j = 1; j < slots.length; j++) {
         const pinBefore = viewTop + stackTop + (j - 1) * offset;
-        const start = pinBefore + heights[j - 1];
+        const start = pinBefore + (heights[j - 1] ?? 0);
         const span = Math.max(1, start - pinBefore - offset);
-        const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
-        for (let i = 0; i < j; i++) depths[i] += cover;
+        const cover = Math.min(1, Math.max(0, (start - (tops[j] ?? 0)) / span));
+        for (let i = 0; i < j; i++) depths[i] = (depths[i] ?? 0) + cover;
         lastCover = cover;
       }
 
@@ -223,7 +223,7 @@ const ScrollStack = ({
       slots.forEach((slot, i) => {
         const card = slot.firstElementChild as HTMLElement | null;
         if (!card) return;
-        const depth = depths[i];
+        const depth = depths[i] ?? 0;
         const lean = Math.min(depth, 1);
         const scale = Math.max(Math.min(settings.baseScale, 1), 1 - depth * settings.itemScale);
         const tilt = -lean * settings.tiltAmount;
