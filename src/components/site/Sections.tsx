@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
+import PixelSwap from "@/components/site/PixelSwap";
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   ArrowLeft,
@@ -60,23 +62,46 @@ export function Hero() {
   const [i, setI] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const go = useCallback((n: number) => {
-    setI((cur) => { setPrev(cur); return (n + SLIDES.length) % SLIDES.length; });
+    const next = (n + SLIDES.length) % SLIDES.length;
+    if (transitioning || next === i) return;
+    setPrev(i);
+    setTransitioning(true);
+    setI(next);
+  }, [i, transitioning]);
+  useEffect(() => {
+    SLIDES.forEach((slide) => {
+      const image = new Image();
+      image.src = slide.img;
+      void image.decode().catch(() => {});
+    });
   }, []);
   useEffect(() => {
-    if (paused) return;
+    if (paused || transitioning) return;
     const t = setTimeout(() => go(i + 1), 7000);
     return () => clearTimeout(t);
-  }, [i, paused, go]);
-  const s = SLIDES[i]!;
+  }, [i, paused, transitioning, go]);
+  const s = SLIDES[i];
+  const previousSlide = SLIDES[prev ?? i];
+  if (!s || !previousSlide) return null;
   return (
     <section id="home" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-teal-deep" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-roledescription="carousel">
-      {prev !== null && (
-        <img src={SLIDES[prev]!.img} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
-      )}
-      <div key={i} className={`absolute inset-0 ${prev !== null ? "animate-doors" : ""}`}>
-        <img src={s.img} alt={s.alt} fetchPriority={i === 0 ? "high" : "auto"} className="animate-kenburns absolute inset-0 h-full w-full object-cover" />
-      </div>
+      <PixelSwap
+        key={i}
+        firstContent={<img src={previousSlide.img} alt={previousSlide.alt} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />}
+        secondContent={<img src={s.img} alt={s.alt} className="absolute inset-0 h-full w-full object-cover" />}
+        active={prev !== null}
+        trigger="manual"
+        pixelSize={80}
+        duration={1400}
+        pixelDuration={450}
+        pattern="random"
+        pixelScale={0.35}
+        aspectRatio="auto"
+        className="pixel-swap--hero"
+        onComplete={() => setTransitioning(false)}
+      />
       <Container className="relative flex h-full flex-col justify-end pb-28 md:pb-32">
         <div key={`t${i}`} className="max-w-3xl drop-shadow-md">
           <p className="animate-fade-up mb-6 text-xs font-bold uppercase tracking-[0.4em] text-cyan drop-shadow" style={{ "--d": "500ms" } as React.CSSProperties}>0{i + 1} / 03 — STUQ</p>
@@ -90,14 +115,14 @@ export function Hero() {
       <div className="absolute bottom-8 right-6 flex items-center gap-6 lg:right-24">
         <div className="flex gap-3">
           {SLIDES.map((_, n) => (
-            <button key={n} onClick={() => go(n)} aria-label={`Go to slide ${n + 1}`} className="h-6 py-2.5">
+            <Button variant="ghost" key={n} disabled={transitioning} onClick={() => go(n)} aria-label={`Go to slide ${n + 1}`} aria-current={n === i ? "true" : undefined} className="h-6 rounded-none p-0 py-2.5 hover:bg-transparent disabled:opacity-100">
               <span className={`block h-px transition-all duration-700 ${n === i ? "w-14 bg-ivory" : "w-6 bg-ivory/40"}`} />
-            </button>
+            </Button>
           ))}
         </div>
         <div className="flex gap-2">
-          <button onClick={() => go(i - 1)} aria-label="Previous slide" className="grid h-11 w-11 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowLeft className="h-4 w-4" /></button>
-          <button onClick={() => go(i + 1)} aria-label="Next slide" className="grid h-11 w-11 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowRight className="h-4 w-4" /></button>
+          <Button variant="ghost" disabled={transitioning} onClick={() => go(i - 1)} aria-label="Previous slide" className="grid h-11 w-11 rounded-none p-0 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowLeft className="h-4 w-4" /></Button>
+          <Button variant="ghost" disabled={transitioning} onClick={() => go(i + 1)} aria-label="Next slide" className="grid h-11 w-11 rounded-none p-0 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowRight className="h-4 w-4" /></Button>
         </div>
       </div>
     </section>
