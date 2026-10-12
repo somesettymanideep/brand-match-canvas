@@ -28,7 +28,7 @@ import {
   Clock,
   Building2,
   ChevronDown,
-import { SLIDES, PROJECTS, SERVICES, FAQS } from "./data";
+} from "lucide-react";
 import studio from "@/assets/studio.jpg";
 import studioVideo from "@/assets/studio-video.mp4";
 import aboutBuilding from "@/assets/about-building.png";
