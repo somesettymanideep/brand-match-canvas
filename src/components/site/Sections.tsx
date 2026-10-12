@@ -658,14 +658,21 @@ export function Services() {
 
         {/* 6 Service Cards Grid (3 columns on desktop, 2 on tablet, 1 on mobile) */}
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {SERVICES_LIST.map((srv) => {
+          {SERVICES_LIST.map((srv, i) => {
             const Icon = srv.icon;
             return (
-              <div
+              <AnimatedContent
                 key={srv.num}
-                data-reveal
-                className="reveal group relative flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-5 shadow-lg shadow-teal/5 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl sm:p-6"
-                style={{ "--d": srv.delay } as React.CSSProperties}
+                distance={80}
+                duration={0.9}
+                ease="power3.out"
+                initialOpacity={0}
+                scale={0.92}
+                threshold={0.15}
+                delay={(i % 3) * 0.12}
+              >
+              <div
+                className="group relative flex h-full flex-col justify-between rounded-3xl border border-slate-100 bg-white p-5 shadow-lg shadow-teal/5 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl sm:p-6"
               >
                 <div>
                   {/* Top Watermark Number + Image Container */}
