@@ -29,6 +29,7 @@ import {
   Building2,
   ChevronDown,
 } from "lucide-react";
+import { SLIDES, PROJECTS, SERVICES, FAQS } from "./data";
 import studio from "@/assets/studio.jpg";
 import studioVideo from "@/assets/studio-video.mp4";
 import aboutBuilding from "@/assets/about-building.png";
