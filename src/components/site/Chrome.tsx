@@ -230,53 +230,66 @@ export function BackToTop() {
   );
 }
 
-function Butterfly({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden>
-      <g className="wing-l"><path d="M20 20 C10 4, 0 10, 6 20 C0 30, 10 34, 20 22Z" className="fill-teal" opacity=".9" /></g>
-      <g className="wing-r"><path d="M20 20 C30 4, 40 10, 34 20 C40 30, 30 34, 20 22Z" className="fill-cyan" opacity=".95" /></g>
-      <rect x="19" y="13" width="2" height="16" rx="1" className="fill-teal-deep" />
-    </svg>
-  );
-}
-
-export function ButterflyCursor() {
+export function ArchitectureCursor() {
   const ref = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
-  const [flights, setFlights] = useState<{ id: number; x: number; y: number }[]>([]);
   useEffect(() => {
-    const ok = window.matchMedia("(pointer: fine)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setEnabled(ok);
-    if (!ok) return;
-    let tx = -100, ty = -100, x = tx, y = ty, raf = 0;
-    const move = (e: MouseEvent) => { tx = e.clientX + 14; ty = e.clientY + 14; };
-    const loop = () => {
-      x += (tx - x) * 0.12; y += (ty - y) * 0.12;
-      if (ref.current) ref.current.style.transform = `translate(${x}px, ${y}px) rotate(${(tx - x) * 0.4}deg)`;
-      raf = requestAnimationFrame(loop);
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      const active = fine.matches && !reduced.matches;
+      setEnabled(active);
+      document.documentElement.classList.remove("drafting-cursor-active");
+      if (ref.current) ref.current.dataset['visible'] = "false";
     };
-    let last = 0;
-    const scroll = () => {
-      const now = Date.now();
-      if (now - last < 1600) return;
-      last = now;
-      const id = now;
-      setFlights((f) => [...f.slice(-1), { id, x: window.innerWidth * (0.6 + Math.random() * 0.3), y: window.innerHeight * (0.55 + Math.random() * 0.3) }]);
-      setTimeout(() => setFlights((f) => f.filter((b) => b.id !== id)), 2300);
+    const hide = () => {
+      if (ref.current) ref.current.dataset['visible'] = "false";
+      document.documentElement.classList.remove("drafting-cursor-active");
     };
-    window.addEventListener("mousemove", move);
-    window.addEventListener("scroll", scroll, { passive: true });
-    raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("mousemove", move); window.removeEventListener("scroll", scroll); };
+    const move = (event: PointerEvent) => {
+      const cursor = ref.current;
+      if (!cursor || !fine.matches || reduced.matches || event.pointerType !== "mouse") return;
+      const target = event.target instanceof Element ? event.target : null;
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) {
+        hide();
+        return;
+      }
+      cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+      cursor.dataset['visible'] = "true";
+      cursor.dataset['interactive'] = String(Boolean(target?.closest('a, button, [role="button"]')));
+      document.documentElement.classList.add("drafting-cursor-active");
+    };
+    const press = () => { if (ref.current) ref.current.dataset['pressed'] = "true"; };
+    const release = () => { if (ref.current) ref.current.dataset['pressed'] = "false"; };
+    sync();
+    fine.addEventListener("change", sync);
+    reduced.addEventListener("change", sync);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", press);
+    window.addEventListener("pointerup", release);
+    window.addEventListener("blur", hide);
+    document.documentElement.addEventListener("pointerleave", hide);
+    return () => {
+      hide();
+      fine.removeEventListener("change", sync);
+      reduced.removeEventListener("change", sync);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", press);
+      window.removeEventListener("pointerup", release);
+      window.removeEventListener("blur", hide);
+      document.documentElement.removeEventListener("pointerleave", hide);
+    };
   }, []);
   if (!enabled) return null;
   return (
-    <>
-      <div ref={ref} className="pointer-events-none fixed left-0 top-0 z-[60]"><Butterfly /></div>
-      {flights.map((b) => (
-        <div key={b.id} className="animate-fly pointer-events-none fixed z-[60]" style={{ left: b.x, top: b.y }}><Butterfly size={28} /></div>
-      ))}
-    </>
+    <div ref={ref} className="architecture-cursor" aria-hidden="true" data-visible="false">
+      <svg viewBox="0 0 48 48" fill="none" className="architecture-cursor-mark">
+        <path className="drafting-axis" d="M24 2v15m0 14v15M2 24h15m14 0h15" />
+        <path className="drafting-ticks" d="M20 8h8M20 40h8M8 20v8M40 20v8" />
+        <path className="drafting-frame" d="M14 19v-5h5m10 0h5v5m0 10v5h-5m-10 0h-5v-5" />
+        <path className="drafting-center" d="M21 24h6m-3-3v6" />
+      </svg>
+    </div>
   );
 }
 

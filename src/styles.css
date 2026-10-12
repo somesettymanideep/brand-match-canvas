@@ -144,11 +144,44 @@
 @utility animate-kenburns { animation: ken-burns 8s ease-out both; }
 @utility animate-fade-up { animation: fade-up 1s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0ms); }
 
-@keyframes flap { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(0.25); } }
-@utility wing-l { transform-origin: 100% 50%; animation: flap 0.35s ease-in-out infinite; }
-@utility wing-r { transform-origin: 0% 50%; animation: flap 0.35s ease-in-out infinite; }
-@keyframes fly-away { 0% { opacity: 0; transform: translate(0,0) rotate(-10deg); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(-140px,-220px) rotate(-25deg); } }
-@utility animate-fly { animation: fly-away 2.2s ease-out forwards; }
+/* Architectural drafting cursor; native cursors remain on form fields. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.drafting-cursor-active,
+  html.drafting-cursor-active * { cursor: none !important; }
+  html.drafting-cursor-active :is(input, textarea, [contenteditable="true"]) { cursor: text !important; }
+  html.drafting-cursor-active select { cursor: auto !important; }
+}
+.architecture-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  color: var(--teal);
+}
+.architecture-cursor[data-visible="true"] { opacity: 1; }
+.architecture-cursor-mark {
+  position: absolute;
+  left: -24px;
+  top: -24px;
+  width: 48px;
+  height: 48px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 1px var(--ivory)) drop-shadow(0 0 2px var(--ivory));
+  transition: transform 180ms ease, color 180ms ease;
+}
+.drafting-ticks { opacity: 0.55; stroke-width: 1; }
+.drafting-frame { stroke-width: 1; }
+.drafting-center { stroke-width: 2; }
+.architecture-cursor[data-interactive="true"] .architecture-cursor-mark {
+  color: var(--teal-deep);
+  transform: scale(1.2) rotate(90deg);
+}
+.architecture-cursor[data-pressed="true"] .architecture-cursor-mark { transform: scale(0.85); }
 
 @utility plan-lines {
   background-image:

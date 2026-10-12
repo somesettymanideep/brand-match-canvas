@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep banner-image pixel transitions in the browser-safe PixelSwap component, controlled by the slideshow; this preserves one animation path for autoplay, arrows, and slide selectors.
+- Keep the drafting cursor in Chrome's ArchitectureCursor with browser effects and CSS-controlled states; this preserves SSR safety and native input, touch, and reduced-motion behavior.
