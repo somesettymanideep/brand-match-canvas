@@ -715,6 +715,7 @@ export function Services() {
                   </a>
                 </div>
               </div>
+              </AnimatedContent>
             );
           })}
         </div>
