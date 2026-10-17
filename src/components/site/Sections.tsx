@@ -32,7 +32,7 @@ import {
   Building2,
   ChevronDown,
 } from "lucide-react";
-import { SLIDES, PROJECTS, SERVICES, FAQS } from "./data";
+import { PROJECTS, SERVICES, FAQS } from "./data";
 import studio from "@/assets/studio.jpg";
 import studioVideo from "@/assets/studio-video.mp4";
 import aboutBuilding from "@/assets/about-building.png";
@@ -48,6 +48,11 @@ import avatarAnjali from "@/assets/avatar-anjali.png";
 import testimonialAlbert from "@/assets/testimonial-albert.jpg";
 import testimonialDarrell from "@/assets/testimonial-darrell.jpg";
 import testimonialKristin from "@/assets/testimonial-kristin.jpg";
+import heroBg from "@/assets/hero-bg.png";
+import heroBuilding from "@/assets/hero-building-isolated.png";
+import heroArchitecture from "@/assets/hero-architecture.jpg";
+import heroInterior from "@/assets/hero-interior.png";
+import heroLandscape from "@/assets/hero-landscape.png";
 import contactBg from "@/assets/contact-bg.png";
 
 const Container = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -55,73 +60,250 @@ const Container = ({ children, className = "" }: { children: React.ReactNode; cl
 );
 
 /* ---------------- HERO ---------------- */
+const HERO_DISCIPLINES = [
+  {
+    id: "architecture",
+    num: "01",
+    categoryLabel: "ARCHITECTURE",
+    titleLine1: "Distinctive Spaces.",
+    titleLine2: "Thoughtfully",
+    titleLine3: "Designed.",
+    text: "We create architecture and interiors that bring people, place, and possibility together.",
+    img: heroBuilding,
+    alt: "Distinctive Spaces - Parametric architectural building model with illuminated facade and landscaped storefront",
+    ctaPrimary: "Explore Projects",
+    ctaPrimaryHref: "#projects",
+    ctaSecondary: "Book a Consultation",
+    ctaSecondaryHref: "#contact",
+  },
+  {
+    id: "interiors",
+    num: "02",
+    categoryLabel: "INTERIORS",
+    titleLine1: "Harmonious Interiors.",
+    titleLine2: "Elegantly",
+    titleLine3: "Crafted.",
+    text: "Functional, biophilic workspaces and residences bringing light, acoustics, and natural textures together.",
+    img: heroInterior,
+    alt: "Modern isometric office workspace featuring vertical living green walls and ergonomic layouts",
+    ctaPrimary: "Discover Services",
+    ctaPrimaryHref: "#services",
+    ctaSecondary: "Book a Consultation",
+    ctaSecondaryHref: "#contact",
+  },
+  {
+    id: "landscape",
+    num: "03",
+    categoryLabel: "LANDSCAPE",
+    titleLine1: "Sculptural Landscapes.",
+    titleLine2: "Naturally",
+    titleLine3: "Integrated.",
+    text: "Curating outdoor spaces with sculptural walkways, botanical installations, and organic shade structures.",
+    img: heroLandscape,
+    alt: "Landscape park design featuring geometric leaf sculptures, illuminated pergolas, and stone walkways",
+    ctaPrimary: "Explore Studio",
+    ctaPrimaryHref: "#about",
+    ctaSecondary: "Book a Consultation",
+    ctaSecondaryHref: "#contact",
+  },
+];
+
 export function Hero() {
-  const [i, setI] = useState(0);
-  const [prev, setPrev] = useState<number | null>(null);
-  const [paused, setPaused] = useState(false);
-  const [transitioning, setTransitioning] = useState(false);
-  const go = useCallback((n: number) => {
-    const next = (n + SLIDES.length) % SLIDES.length;
-    if (transitioning || next === i) return;
-    setPrev(i);
-    setTransitioning(true);
-    setI(next);
-  }, [i, transitioning]);
-  useEffect(() => {
-    SLIDES.forEach((slide) => {
-      const image = new Image();
-      image.src = slide.img;
-      void image.decode().catch(() => {});
-    });
-  }, []);
-  useEffect(() => {
-    if (paused || transitioning) return;
-    const t = setTimeout(() => go(i + 1), 7000);
-    return () => clearTimeout(t);
-  }, [i, paused, transitioning, go]);
-  const s = SLIDES[i];
-  const previousSlide = SLIDES[prev ?? i];
-  if (!s || !previousSlide) return null;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
+
+  const selectDiscipline = (index: number) => {
+    if (index === activeIndex) return;
+    setPrevIndex(activeIndex);
+    setActiveIndex(index);
+  };
+
+  const active = HERO_DISCIPLINES[activeIndex];
+  const previous = HERO_DISCIPLINES[prevIndex ?? activeIndex];
+
   return (
-    <section id="home" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-teal-deep" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-roledescription="carousel">
-      <PixelSwap
-        key={i}
-        firstContent={<img src={previousSlide.img} alt={previousSlide.alt} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />}
-        secondContent={<img src={s.img} alt={s.alt} className="absolute inset-0 h-full w-full object-cover" />}
-        active={prev !== null}
-        trigger="manual"
-        pixelSize={80}
-        duration={1400}
-        pixelDuration={450}
-        pattern="random"
-        pixelScale={0.35}
-        aspectRatio="auto"
-        className="pixel-swap--hero"
-        onComplete={() => setTransitioning(false)}
-      />
-      <Container className="relative flex h-full flex-col justify-end pb-28 md:pb-32">
-        <div key={`t${i}`} className="max-w-3xl drop-shadow-md">
-          <p className="animate-fade-up mb-6 text-xs font-bold uppercase tracking-[0.4em] text-cyan drop-shadow" style={{ "--d": "500ms" } as React.CSSProperties}>0{i + 1} / 03 — STUQ</p>
-          <h1 className="animate-fade-up font-serif text-5xl leading-[0.95] text-ivory drop-shadow-lg sm:text-7xl lg:text-8xl" style={{ "--d": "700ms" } as React.CSSProperties}>{s.title}</h1>
-          <p className="animate-fade-up mt-6 max-w-xl text-lg text-ivory drop-shadow" style={{ "--d": "900ms" } as React.CSSProperties}>{s.text}</p>
-          <div className="animate-fade-up mt-10" style={{ "--d": "1100ms" } as React.CSSProperties}>
-            <a href={s.href} className="btn-ghost-light">{s.cta} <ArrowRight className="h-4 w-4" /></a>
+    <section
+      id="home"
+      className="relative min-h-[100svh] overflow-hidden text-[#0E2638] flex flex-col justify-between pt-28 pb-8 sm:pt-32 sm:pb-10 lg:pt-32 lg:pb-8 selection:bg-cyan/25"
+    >
+      {/* Background Architectural Blueprint Image */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <img
+          src={heroBg}
+          alt=""
+          className="h-full w-full object-cover object-center"
+          loading="eager"
+        />
+      </div>
+
+      {/* Main Content Area */}
+      <Container className="relative z-10 w-full flex-1 flex flex-col justify-center my-auto">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-14 items-center">
+          
+          {/* Left Column: Architectural Building Model Image Showcase */}
+          <div className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center relative">
+            <div className="relative w-full max-w-[620px] lg:max-w-none aspect-[16/11] sm:aspect-[16/10] flex items-center justify-center">
+              <PixelSwap
+                key={activeIndex}
+                firstContent={
+                  <img
+                    src={previous.img}
+                    alt={previous.alt}
+                    className="h-full w-full object-contain object-left-bottom select-none drop-shadow-[0_20px_35px_rgba(0,124,145,0.2)]"
+                  />
+                }
+                secondContent={
+                  <img
+                    src={active.img}
+                    alt={active.alt}
+                    className="h-full w-full object-contain object-left-bottom select-none drop-shadow-[0_20px_35px_rgba(0,124,145,0.2)]"
+                  />
+                }
+                active={prevIndex !== null}
+                trigger="manual"
+                pixelSize={45}
+                duration={750}
+                pixelDuration={280}
+                pattern="random"
+                pixelScale={0.35}
+                aspectRatio="auto"
+                className="h-full w-full"
+              />
+            </div>
+
+            {/* Decorative SEA Brand Turquoise 3D Prism / Cursor Accent */}
+            <div className="hidden lg:flex items-center gap-1 absolute -right-4 xl:-right-6 top-[50%] z-20 pointer-events-none select-none drop-shadow-lg">
+              <div className="relative">
+                <svg width="42" height="42" viewBox="0 0 42 42" fill="none" className="transition-transform duration-500 hover:rotate-6">
+                  {/* Top Face */}
+                  <path d="M21 5L36 32H6L21 5Z" fill="#00A2B8" fillOpacity="0.85" />
+                  {/* Right shaded facet */}
+                  <path d="M21 5L36 32L21 26V5Z" fill="#007C91" />
+                  {/* Left highlight facet */}
+                  <path d="M21 5L6 32L21 26V5Z" fill="#38D9C0" />
+                </svg>
+                {/* Pointer cursor icon */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="#0E2638"
+                  className="absolute -bottom-1 -right-1 drop-shadow-sm"
+                >
+                  <path
+                    d="M3 3L10.07 19.97L12.58 13.58L18.97 11.07L3 3Z"
+                    stroke="#ffffff"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Hero Content */}
+          <div className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center text-left text-[#0E2638]">
+            {/* Category Navigation Eyebrow */}
+            <div className="flex items-center gap-2 text-[0.72rem] sm:text-xs font-semibold uppercase tracking-[0.28em] text-[#007C91]">
+              {HERO_DISCIPLINES.map((item, idx) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => selectDiscipline(idx)}
+                  className={`transition-all duration-300 ${
+                    activeIndex === idx
+                      ? "text-[#007C91] font-bold underline underline-offset-4 decoration-2"
+                      : "text-[#5B828C] hover:text-[#007C91]"
+                  }`}
+                >
+                  {item.categoryLabel}
+                  {idx < HERO_DISCIPLINES.length - 1 && (
+                    <span className="mx-2 text-[#7EA0A8] no-underline inline-block">•</span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Main Headline */}
+            <h1
+              key={`h1-${active.id}`}
+              className="mt-4 font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4.1rem] font-normal leading-[1.08] tracking-tight text-[#0E2638] animate-fade-in"
+            >
+              {active.titleLine1}
+              <br />
+              {active.titleLine2}
+              <br />
+              {active.titleLine3}
+            </h1>
+
+            {/* Narrative text */}
+            <p
+              key={`p-${active.id}`}
+              className="mt-5 max-w-xl text-sm sm:text-base lg:text-[1.05rem] leading-relaxed text-[#4A6973] font-normal animate-fade-in"
+            >
+              {active.text}
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href={active.ctaPrimaryHref}
+                className="inline-flex items-center gap-2 rounded-lg bg-[#0B3B46] px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#06242B] hover:shadow-lg hover:shadow-[#0B3B46]/25 group"
+              >
+                <span>{active.ctaPrimary}</span>
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+              <a
+                href={active.ctaSecondaryHref}
+                className="inline-flex items-center gap-2 rounded-lg border border-[#0B3B46]/70 px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-[#0B3B46] transition-all duration-300 hover:bg-[#0B3B46] hover:text-white"
+              >
+                <span>{active.ctaSecondary}</span>
+              </a>
+            </div>
+
+            {/* Studio Accent Divider Line */}
+            <div className="mt-9 flex items-center gap-3 pt-2">
+              <span className="h-[1px] w-8 bg-[#6A8F99]" />
+              <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-[#6A8F99]">
+                STUDIO FOR ECLECTIC ARCHITECTURE
+              </p>
+            </div>
           </div>
         </div>
       </Container>
-      <div className="absolute bottom-8 right-6 flex items-center gap-6 lg:right-24">
-        <div className="flex gap-3">
-          {SLIDES.map((_, n) => (
-            <Button variant="ghost" key={n} disabled={transitioning} onClick={() => go(n)} aria-label={`Go to slide ${n + 1}`} aria-current={n === i ? "true" : undefined} className="h-6 rounded-none p-0 py-2.5 hover:bg-transparent disabled:opacity-100">
-              <span className={`block h-px transition-all duration-700 ${n === i ? "w-14 bg-ivory" : "w-6 bg-ivory/40"}`} />
-            </Button>
-          ))}
+
+      {/* Bottom Row: Scroll to Explore & Pagination */}
+      <Container className="relative z-10 w-full mt-6 pt-4 border-t border-[#007C91]/15">
+        <div className="flex items-center justify-between">
+          {/* Scroll to explore link */}
+          <a
+            href="#about"
+            className="inline-flex items-center gap-2 text-xs font-medium tracking-wider text-[#5A7C85] hover:text-[#007C91] transition-colors group"
+          >
+            <span>Scroll to explore</span>
+            <span className="inline-block transition-transform duration-300 group-hover:translate-y-1">
+              ↓
+            </span>
+          </a>
+
+          {/* Discipline Pagination Counter */}
+          <div className="flex items-center gap-2 font-mono text-xs font-semibold tracking-widest text-[#5A7C85]">
+            {HERO_DISCIPLINES.map((item, idx) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => selectDiscipline(idx)}
+                className={`transition-all duration-300 hover:text-[#007C91] ${
+                  activeIndex === idx ? "text-[#0B3B46] font-bold" : "text-[#7EA0A8]"
+                }`}
+              >
+                {item.num}
+              </button>
+            )).reduce((prev, curr, idx) => [prev, <span key={`sep-${idx}`}>/</span>, curr])}
+            <span className="ml-2 inline-block h-[2px] w-8 bg-[#0B3B46]/60" />
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="ghost" disabled={transitioning} onClick={() => go(i - 1)} aria-label="Previous slide" className="grid h-11 w-11 rounded-none p-0 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowLeft className="h-4 w-4" /></Button>
-          <Button variant="ghost" disabled={transitioning} onClick={() => go(i + 1)} aria-label="Next slide" className="grid h-11 w-11 rounded-none p-0 place-items-center border border-ivory/40 text-ivory transition-colors hover:bg-ivory hover:text-teal-deep"><ArrowRight className="h-4 w-4" /></Button>
-        </div>
-      </div>
+      </Container>
     </section>
   );
 }

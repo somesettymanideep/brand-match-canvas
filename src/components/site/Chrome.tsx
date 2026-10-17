@@ -47,23 +47,52 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-teal-deep/90 py-3 shadow-lg backdrop-blur-md" : "bg-transparent py-6"
+        scrolled ? "bg-teal-deep/95 py-3 shadow-lg backdrop-blur-md" : "bg-transparent py-5"
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-10">
-        <a href="#home" className="shrink-0 overflow-hidden rounded-[5px] bg-ivory/95 px-3.5 py-1.5 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-md" aria-label="STUQ home">
-          <img src={logo} alt="STUQ – Studio for Eclectic Architecture" className={`w-auto rounded-[5px] transition-all duration-500 ${scrolled ? "h-8" : "h-10"}`} />
+        <a
+          href="#home"
+          className={`shrink-0 overflow-hidden rounded-[5px] transition-all duration-300 hover:scale-105 ${
+            scrolled ? "bg-ivory/95 px-3.5 py-1.5 shadow-sm" : "bg-white/80 px-3.5 py-1.5 shadow-sm border border-[#0E2638]/10 backdrop-blur-sm"
+          }`}
+          aria-label="STUQ home"
+        >
+          <img
+            src={logo}
+            alt="STUQ – Studio for Eclectic Architecture"
+            className={`w-auto transition-all duration-500 ${scrolled ? "h-8" : "h-9"}`}
+          />
         </a>
-        <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 xl:flex" aria-label="Primary">
           {NAV.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-ivory/85 transition-colors hover:text-cyan">
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              className={`text-[0.75rem] font-semibold uppercase tracking-[0.2em] transition-colors ${
+                scrolled ? "text-ivory/85 hover:text-cyan" : "text-[#0E2638]/85 hover:text-[#007C91]"
+              }`}
+            >
               {n.label}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#contact" className="btn-primary hidden !py-3 sm:inline-flex">Book a Consultation</a>
-          <button onClick={() => setOpen(true)} className="grid h-11 w-11 place-items-center text-ivory xl:hidden" aria-label="Open menu">
+          <a
+            href="#contact"
+            className={`hidden sm:inline-flex rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+              scrolled
+                ? "btn-primary !py-3"
+                : "border border-[#0E2638]/40 text-[#0E2638] hover:bg-[#0E2638] hover:text-white"
+            }`}
+          >
+            Let's Talk
+          </a>
+          <button
+            onClick={() => setOpen(true)}
+            className={`grid h-11 w-11 place-items-center xl:hidden ${scrolled ? "text-ivory" : "text-[#0E2638]"}`}
+            aria-label="Open menu"
+          >
             <Menu />
           </button>
         </div>
