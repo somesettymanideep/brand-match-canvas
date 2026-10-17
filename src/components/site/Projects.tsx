@@ -11,15 +11,11 @@ export function Projects() {
 
       {/* Section header */}
       <div className="relative z-10 mx-auto w-full max-w-3xl px-6 text-center">
-        <div className="flex items-center justify-center gap-2">
-          <span className="h-[1.5px] w-6 bg-[#007C91]" />
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#007C91]">OUR PROJECTS</p>
-          <span className="h-[1.5px] w-6 bg-[#007C91]" />
-        </div>
-        <h2 className="mt-3 font-serif text-3xl font-normal leading-tight tracking-tight text-[#172B35] sm:text-4xl md:text-[2.65rem]">
-          A Journey Through Our Projects
+        <h2 className="font-serif text-4xl font-normal tracking-tight sm:text-5xl lg:text-[3.5rem]">
+          <span className="text-[#067688]">OUR</span>{" "}
+          <span className="text-[#0e2638]">PROJECTS</span>
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-[#597080] sm:text-sm">
+        <p className="mx-auto mt-4 max-w-2xl text-xs leading-relaxed text-[#597080] sm:text-sm">
           Explore our diverse portfolio of architectural, interior, and landscape landmarks crafted with
           creativity, precision, and purpose.
         </p>

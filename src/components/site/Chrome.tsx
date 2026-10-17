@@ -232,7 +232,11 @@ export function BackToTop() {
 
 export function ArchitectureCursor() {
   const ref = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<SVGSVGElement>(null);
   const [enabled, setEnabled] = useState(false);
+  const lastPos = useRef({ x: 0, y: 0 });
+  const idleTimer = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -258,6 +262,26 @@ export function ArchitectureCursor() {
       cursor.dataset['visible'] = "true";
       cursor.dataset['interactive'] = String(Boolean(target?.closest('a, button, [role="button"]')));
       document.documentElement.classList.add("drafting-cursor-active");
+
+      // Smooth dynamic tilt of arrow along cursor movement
+      if (arrowRef.current && !reduced.matches) {
+        const dx = event.clientX - lastPos.current.x;
+        const dy = event.clientY - lastPos.current.y;
+        lastPos.current = { x: event.clientX, y: event.clientY };
+        const speed = Math.hypot(dx, dy);
+
+        if (speed > 1.5) {
+          const tilt = Math.max(-20, Math.min(20, (dx / (Math.abs(dy) + 1.5)) * 14));
+          arrowRef.current.style.transform = `rotate(${tilt}deg)`;
+
+          if (idleTimer.current) clearTimeout(idleTimer.current);
+          idleTimer.current = setTimeout(() => {
+            if (arrowRef.current) {
+              arrowRef.current.style.transform = "rotate(0deg)";
+            }
+          }, 90);
+        }
+      }
     };
     const press = () => { if (ref.current) ref.current.dataset['pressed'] = "true"; };
     const release = () => { if (ref.current) ref.current.dataset['pressed'] = "false"; };
@@ -278,11 +302,32 @@ export function ArchitectureCursor() {
       window.removeEventListener("pointerup", release);
       window.removeEventListener("blur", hide);
       document.documentElement.removeEventListener("pointerleave", hide);
+      if (idleTimer.current) clearTimeout(idleTimer.current);
     };
   }, []);
+
   if (!enabled) return null;
   return (
     <div ref={ref} className="architecture-cursor" aria-hidden="true" data-visible="false">
+      {/* Precision Drafting Arrow Pointer that moves along with cursor */}
+      <svg
+        ref={arrowRef}
+        viewBox="0 0 24 24"
+        fill="none"
+        className="architecture-cursor-arrow"
+      >
+        <path
+          d="M2 2L19 8.5L11.5 11.5L8.5 19L2 2Z"
+          fill="currentColor"
+          stroke="#ffffff"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+        <circle cx="2" cy="2" r="1.5" fill="#ffffff" />
+      </svg>
+
+      {/* Architectural Crosshair Reticle */}
       <svg viewBox="0 0 48 48" fill="none" className="architecture-cursor-mark">
         <path className="drafting-axis" d="M24 2v15m0 14v15M2 24h15m14 0h15" />
         <path className="drafting-ticks" d="M20 8h8M20 40h8M8 20v8M40 20v8" />

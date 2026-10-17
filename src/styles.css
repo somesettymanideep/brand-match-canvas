@@ -160,9 +160,29 @@
   z-index: 100;
   pointer-events: none;
   opacity: 0;
-  color: var(--teal);
+  color: #067688;
 }
 .architecture-cursor[data-visible="true"] { opacity: 1; }
+.architecture-cursor-arrow {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 26px;
+  height: 26px;
+  color: #067688;
+  filter: drop-shadow(0 2px 4px rgba(14, 38, 56, 0.45));
+  transform-origin: 2px 2px;
+  transition: transform 140ms ease-out, color 180ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.architecture-cursor[data-interactive="true"] .architecture-cursor-arrow {
+  color: #0e2638;
+  transform: scale(1.18);
+}
+.architecture-cursor[data-pressed="true"] .architecture-cursor-arrow {
+  transform: scale(0.88);
+}
 .architecture-cursor-mark {
   position: absolute;
   left: -24px;
@@ -172,7 +192,8 @@
   stroke: currentColor;
   stroke-width: 1.5;
   filter: drop-shadow(0 0 1px var(--ivory)) drop-shadow(0 0 2px var(--ivory));
-  transition: transform 180ms ease, color 180ms ease;
+  transition: transform 180ms ease, color 180ms ease, opacity 180ms ease;
+  opacity: 0.65;
 }
 .drafting-ticks { opacity: 0.55; stroke-width: 1; }
 .drafting-frame { stroke-width: 1; }
@@ -180,6 +201,7 @@
 .architecture-cursor[data-interactive="true"] .architecture-cursor-mark {
   color: var(--teal-deep);
   transform: scale(1.2) rotate(90deg);
+  opacity: 0.9;
 }
 .architecture-cursor[data-pressed="true"] .architecture-cursor-mark { transform: scale(0.85); }
 

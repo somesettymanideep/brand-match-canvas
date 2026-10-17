@@ -41,13 +41,7 @@ import vastuBg from "@/assets/vastu-bg.png";
 import vastuMandala from "@/assets/vastu-mandala.png";
 import p1 from "@/assets/p1.jpg";
 import p2 from "@/assets/p2.jpg";
-import p3 from "@/assets/p3.jpg";
 import p4 from "@/assets/p4.jpg";
-import p5 from "@/assets/p5.jpg";
-import p6 from "@/assets/p6.jpg";
-import serviceArch from "@/assets/service-arch.jpg";
-import serviceInterior from "@/assets/service-interior.jpg";
-import serviceLandscape from "@/assets/service-landscape.jpg";
 import avatarPriya from "@/assets/avatar-priya.png";
 import avatarRamesh from "@/assets/avatar-ramesh.png";
 import avatarAnjali from "@/assets/avatar-anjali.png";
@@ -161,20 +155,14 @@ export function About() {
         {/* Top: Left Info & Awards + Right Architectural Visual with Watch Video */}
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
           <div>
-            {/* Eyebrow with teal line */}
-            <div data-reveal className="reveal flex flex-col items-start gap-1">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#334155]">ABOUT US</span>
-              <span className="h-[2.5px] w-8 rounded-full bg-teal" />
-            </div>
-
             {/* Title */}
             <h2
               data-reveal
-              className="reveal mt-6 font-serif text-4xl font-normal leading-[1.15] tracking-tight text-[#0f172a] sm:text-5xl lg:text-[3.25rem]"
+              className="reveal font-serif text-4xl font-normal tracking-tight sm:text-5xl lg:text-[3.5rem]"
               style={{ "--d": "100ms" } as React.CSSProperties}
             >
-              Architecture, Interiors <br />
-              <span className="text-teal">& Landscape.</span>
+              <span className="text-[#067688]">ABOUT</span>{" "}
+              <span className="text-[#0e2638]">US</span>
             </h2>
 
             {/* Description */}
@@ -415,22 +403,14 @@ export function Vastu() {
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           {/* Left Column: Text, 3 Pillars, Read More */}
           <div>
-            {/* Eyebrow */}
-            <div data-reveal className="reveal flex items-center gap-3">
-              <span className="h-[2px] w-8 rounded-full bg-[#8C531B]" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#8C827A]">
-                VASTU KNOWLEDGE
-              </span>
-            </div>
-
             {/* Title */}
             <h2
               data-reveal
-              className="reveal mt-5 font-serif text-4xl font-normal tracking-tight sm:text-5xl lg:text-[3.5rem]"
+              className="reveal font-serif text-4xl font-normal tracking-tight sm:text-5xl lg:text-[3.5rem]"
               style={{ "--d": "100ms" } as React.CSSProperties}
             >
-              <span className="text-[#8C531B]">VASTU</span>{" "}
-              <span className="text-[#1a1a1a]">SHASTRA</span>
+              <span className="text-[#067688]">VASTU</span>{" "}
+              <span className="text-[#0e2638]">SHASTRA</span>
             </h2>
 
             {/* Paragraphs */}
@@ -461,10 +441,10 @@ export function Vastu() {
             >
               {/* 1. BALANCE */}
               <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#e7d8c5] bg-gradient-to-b from-[#f8f2e9] to-[#eee0ce] text-[#8C531B] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <LotusIcon className="h-7 w-7 text-[#8C531B]" />
+                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
+                  <LotusIcon className="h-7 w-7 text-[#067688]" />
                 </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#1a1a1a]">
+                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
                   BALANCE
                 </h3>
                 <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
@@ -474,10 +454,10 @@ export function Vastu() {
 
               {/* 2. WELL-BEING */}
               <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#e7d8c5] bg-gradient-to-b from-[#f8f2e9] to-[#eee0ce] text-[#8C531B] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <MeditateIcon className="h-7 w-7 text-[#8C531B]" />
+                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
+                  <MeditateIcon className="h-7 w-7 text-[#067688]" />
                 </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#1a1a1a]">
+                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
                   WELL-BEING
                 </h3>
                 <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
@@ -487,10 +467,10 @@ export function Vastu() {
 
               {/* 3. PROSPERITY */}
               <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#e7d8c5] bg-gradient-to-b from-[#f8f2e9] to-[#eee0ce] text-[#8C531B] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <ProsperityIcon className="h-7 w-7 text-[#8C531B]" />
+                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
+                  <ProsperityIcon className="h-7 w-7 text-[#067688]" />
                 </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#1a1a1a]">
+                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
                   PROSPERITY
                 </h3>
                 <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
@@ -503,7 +483,7 @@ export function Vastu() {
             <div data-reveal className="reveal mt-9" style={{ "--d": "500ms" } as React.CSSProperties}>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-3 rounded-sm bg-[#8C531B] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#734012] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-[#8C531B]"
+                className="inline-flex items-center gap-3 rounded-sm bg-[#067688] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#055d6b] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-[#067688]"
               >
                 <span>Read More</span>
                 <span className="text-base font-bold leading-none">→</span>
@@ -596,7 +576,6 @@ const SERVICES_LIST = [
   {
     num: "01",
     title: "ARCHITECTURAL\nDESIGN",
-    img: serviceArch,
     icon: ServiceArchIcon,
     desc: "Our experts prepare preliminary design sketches and concepts based on your requirements and budget, helping you explore and visualize the best options for your dream space.",
     delay: "100ms",
@@ -604,7 +583,6 @@ const SERVICES_LIST = [
   {
     num: "02",
     title: "INTERIOR\nDESIGN",
-    img: serviceInterior,
     icon: ServiceInteriorIcon,
     desc: "Our designers plan, research, coordinate and enhance interiors to create healthier, more functional and aesthetically pleasing environments using the space efficiently.",
     delay: "200ms",
@@ -612,7 +590,6 @@ const SERVICES_LIST = [
   {
     num: "03",
     title: "LANDSCAPE\nDESIGN",
-    img: serviceLandscape,
     icon: ServiceLandscapeIcon,
     desc: "Our team uses their creativity and understanding of outdoor environments to create well-designed outdoor spaces that are functional and visually appealing, with suitable plants, types of grass, furniture and other design elements.",
     delay: "300ms",
@@ -620,7 +597,6 @@ const SERVICES_LIST = [
   {
     num: "04",
     title: "STRUCTURAL\nDESIGN",
-    img: p4,
     icon: ServiceStructuralIcon,
     desc: "Comprehensive structural engineering analysis, foundational design, framing systems, and seismic-resilient planning coordinated to guarantee structural integrity, compliance, and safety.",
     delay: "400ms",
@@ -628,7 +604,6 @@ const SERVICES_LIST = [
   {
     num: "05",
     title: "PROJECT\nMANAGEMENT",
-    img: p5,
     icon: ServicePmIcon,
     desc: "End-to-end execution oversight, schedule monitoring, quality assurance, cost engineering, and vendor coordination ensuring smooth construction on time and within budget.",
     delay: "500ms",
@@ -636,7 +611,6 @@ const SERVICES_LIST = [
   {
     num: "06",
     title: "BIM\nSERVICES",
-    img: p6,
     icon: ServiceBimIcon,
     desc: "Building Information Modeling (BIM) creating coordinated 3D digital models, parametric documentation, clash detection, and multidisciplinary workflows for seamless execution.",
     delay: "600ms",
@@ -656,34 +630,27 @@ export function Services() {
       </div>
 
       <Container className="relative">
-        {/* Centered Eyebrow */}
-        <div data-reveal className="reveal flex items-center justify-center gap-3">
-          <span className="h-[1.5px] w-8 rounded-full bg-teal/60" />
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-teal">OUR SERVICES</span>
-          <span className="h-[1.5px] w-8 rounded-full bg-teal/60" />
-        </div>
-
         {/* Centered Main Title */}
         <h2
           data-reveal
-          className="reveal mt-4 text-center font-serif text-4xl font-normal tracking-tight text-[#0e2638] sm:text-5xl lg:text-[3.25rem] leading-[1.12]"
+          className="reveal text-center font-serif text-4xl font-normal tracking-tight sm:text-5xl lg:text-[3.5rem] leading-[1.12]"
           style={{ "--d": "100ms" } as React.CSSProperties}
         >
-          Concept to Creation <br />
-          <span className="font-semibold text-teal">Spaces for Every Story</span>
+          <span className="text-[#067688]">OUR</span>{" "}
+          <span className="text-[#0e2638]">SERVICES</span>
         </h2>
 
         {/* Subtitle */}
         <p
           data-reveal
-          className="reveal mx-auto mt-5 max-w-2xl text-center text-sm sm:text-[0.95rem] leading-relaxed text-[#597080]"
+          className="reveal mx-auto mt-4 max-w-2xl text-center text-sm sm:text-[0.95rem] leading-relaxed text-[#597080]"
           style={{ "--d": "200ms" } as React.CSSProperties}
         >
           From architectural planning to interiors, structures, BIM and project management, we offer comprehensive end-to-end solutions tailored to your vision.
         </p>
 
         {/* 6 Service Cards Grid (3 columns on desktop, 2 on tablet, 1 on mobile) */}
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {SERVICES_LIST.map((srv, i) => {
             const Icon = srv.icon;
             return (
@@ -697,50 +664,48 @@ export function Services() {
                 threshold={0.15}
                 delay={(i % 3) * 0.12}
               >
-              <div
-                className="group relative flex h-full flex-col justify-between rounded-3xl border border-slate-100 bg-white p-5 shadow-lg shadow-teal/5 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl sm:p-6"
-              >
-                <div>
-                  {/* Top Watermark Number + Image Container */}
+                <div
+                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-7 sm:p-8 shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:border-[#067688]/40 hover:bg-gradient-to-br hover:from-white hover:via-[#f9fdfe] hover:to-[#eef8fa] hover:shadow-2xl hover:shadow-[#067688]/15"
+                >
+                  {/* Subtle ambient light aura in top-right corner on hover */}
+                  <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#067688]/0 blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-[#067688]/15" />
+
                   <div className="relative">
-                    <span className="pointer-events-none absolute right-2 -top-1 font-display text-5xl font-bold text-teal/20">
-                      {srv.num}
-                    </span>
-                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100">
-                      <img
-                        src={srv.img}
-                        alt={srv.title.replace("\n", " ")}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
+                    {/* Top Row: Icon Badge + Watermark Number */}
+                    <div className="flex items-center justify-between">
+                      <div className="grid h-14 w-14 place-items-center rounded-2xl border border-[#067688]/20 bg-[#067688]/10 text-[#067688] shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-3deg] group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#067688]/30">
+                        <Icon className="h-6 w-6 transition-colors duration-300" />
+                      </div>
+                      <span className="font-display text-4xl sm:text-5xl font-extrabold tracking-wider text-[#067688]/15 transition-all duration-500 group-hover:text-[#067688]/35 select-none">
+                        {srv.num}
+                      </span>
                     </div>
-                    {/* Overlapping circular icon badge */}
-                    <div className="absolute -bottom-5 left-4 grid h-12 w-12 place-items-center rounded-full border border-teal/40 bg-white text-teal shadow-md transition-transform duration-300 group-hover:scale-110">
-                      <Icon className="h-5 w-5 text-teal" />
+
+                    {/* Architectural Accent Bar */}
+                    <div className="mt-6 h-0.5 w-10 rounded-full bg-[#067688]/30 transition-all duration-500 group-hover:w-20 group-hover:bg-[#067688]" />
+
+                    {/* Content: Title & Description */}
+                    <div className="mt-5">
+                      <h3 className="font-display text-xl font-bold tracking-tight text-[#0e2638] transition-colors duration-300 group-hover:text-[#067688] whitespace-pre-line leading-tight">
+                        {srv.title}
+                      </h3>
+                      <p className="mt-3.5 text-xs sm:text-[0.85rem] leading-relaxed text-[#597080] transition-colors duration-300 group-hover:text-[#334e60]">
+                        {srv.desc}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="mt-9">
-                    <h3 className="font-display text-lg font-bold tracking-tight text-[#0f2434] whitespace-pre-line">
-                      {srv.title}
-                    </h3>
-                    <p className="mt-3 text-xs sm:text-[0.82rem] leading-relaxed text-[#597080]">
-                      {srv.desc}
-                    </p>
+                  {/* Card Footer: Interactive Learn More CTA */}
+                  <div className="relative mt-8 pt-4 border-t border-slate-100 transition-colors duration-300 group-hover:border-[#067688]/15">
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-2.5 rounded-full border border-[#0e2638]/20 bg-slate-50/70 px-5 py-2.5 text-xs font-semibold text-[#0e2638] transition-all duration-300 group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:text-white group-hover:shadow-md group-hover:shadow-[#067688]/25"
+                    >
+                      <span>Learn More</span>
+                      <span className="text-sm transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </a>
                   </div>
                 </div>
-
-                <div className="mt-8 pt-2">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center gap-2 rounded-full border border-[#0f2434]/40 px-5 py-2 text-xs font-semibold text-[#0f2434] transition-all duration-300 hover:border-teal hover:bg-teal hover:text-white"
-                  >
-                    <span>Learn More</span>
-                    <span className="text-sm">→</span>
-                  </a>
-                </div>
-              </div>
               </AnimatedContent>
             );
           })}
