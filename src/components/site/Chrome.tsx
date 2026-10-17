@@ -259,9 +259,19 @@ export function BackToTop() {
   );
 }
 
+interface TrailPoint {
+  x: number;
+  y: number;
+  time: number;
+  isStart?: boolean;
+}
+
 export function ArchitectureCursor() {
   const ref = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<SVGSVGElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pointsRef = useRef<TrailPoint[]>([]);
+  const animRef = useRef<number | null>(null);
   const [enabled, setEnabled] = useState(false);
   const lastPos = useRef({ x: 0, y: 0 });
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
@@ -269,16 +279,186 @@ export function ArchitectureCursor() {
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const updateCanvasSize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+    };
+
+    const clearTrail = () => {
+      pointsRef.current = [];
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = null;
+      }
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.restore();
+        }
+      }
+    };
+
+    const TRAIL_DURATION = 800; // ms: older trail fades to transparent within 0.8s (0.6–1.0s)
+
+    const renderTrail = (time: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        animRef.current = null;
+        return;
+      }
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        animRef.current = null;
+        return;
+      }
+
+      const points = pointsRef.current;
+
+      // Prune points that have fully faded out
+      while (points.length > 0 && time - points[0].time >= TRAIL_DURATION) {
+        points.shift();
+      }
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (points.length === 0) {
+        // When cursor stops, trail fades out completely and animation halts
+        animRef.current = null;
+        return;
+      }
+
+      // Group active points into continuous stroke segments
+      const strokes: TrailPoint[][] = [];
+      let currentStroke: TrailPoint[] = [];
+      for (let i = 0; i < points.length; i++) {
+        const pt = points[i];
+        if (pt.isStart && currentStroke.length > 0) {
+          strokes.push(currentStroke);
+          currentStroke = [];
+        }
+        currentStroke.push(pt);
+      }
+      if (currentStroke.length > 0) strokes.push(currentStroke);
+
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      for (const stroke of strokes) {
+        const len = stroke.length;
+        if (len === 1) {
+          const age = time - stroke[0].time;
+          const progress = Math.max(0, 1 - age / TRAIL_DURATION);
+          const alpha = progress * 0.75;
+          if (alpha > 0.01) {
+            ctx.fillStyle = `rgba(6, 118, 136, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(stroke[0].x, stroke[0].y, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          continue;
+        }
+
+        if (len === 2) {
+          const age = time - stroke[1].time;
+          const progress = Math.max(0, 1 - age / TRAIL_DURATION);
+          const alpha = progress * 0.85;
+          if (alpha > 0.01) {
+            ctx.strokeStyle = `rgba(6, 118, 136, ${alpha})`;
+            ctx.lineWidth = 1.0 + progress * 0.8;
+            ctx.beginPath();
+            ctx.moveTo(stroke[0].x, stroke[0].y);
+            ctx.lineTo(stroke[1].x, stroke[1].y);
+            ctx.stroke();
+          }
+          continue;
+        }
+
+        // Draw smooth quadratic curves through midpoints
+        const mid0X = (stroke[0].x + stroke[1].x) / 2;
+        const mid0Y = (stroke[0].y + stroke[1].y) / 2;
+        const age0 = time - stroke[0].time;
+        const prog0 = Math.max(0, 1 - age0 / TRAIL_DURATION);
+        const alpha0 = prog0 * 0.8;
+
+        if (alpha0 > 0.01) {
+          ctx.strokeStyle = `rgba(6, 118, 136, ${alpha0})`;
+          ctx.lineWidth = 0.9 + prog0 * 0.8;
+          ctx.beginPath();
+          ctx.moveTo(stroke[0].x, stroke[0].y);
+          ctx.lineTo(mid0X, mid0Y);
+          ctx.stroke();
+        }
+
+        let prevMidX = mid0X;
+        let prevMidY = mid0Y;
+
+        for (let i = 1; i < len - 1; i++) {
+          const nextMidX = (stroke[i].x + stroke[i + 1].x) / 2;
+          const nextMidY = (stroke[i].y + stroke[i + 1].y) / 2;
+          const age = time - stroke[i].time;
+          const progress = Math.max(0, 1 - age / TRAIL_DURATION);
+          const alpha = progress * 0.85;
+
+          if (alpha > 0.01) {
+            ctx.strokeStyle = `rgba(6, 118, 136, ${alpha})`;
+            ctx.lineWidth = 0.9 + progress * 0.9;
+            ctx.beginPath();
+            ctx.moveTo(prevMidX, prevMidY);
+            ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, nextMidX, nextMidY);
+            ctx.stroke();
+          }
+
+          prevMidX = nextMidX;
+          prevMidY = nextMidY;
+        }
+
+        const lastAge = time - stroke[len - 1].time;
+        const lastProg = Math.max(0, 1 - lastAge / TRAIL_DURATION);
+        const lastAlpha = lastProg * 0.9;
+        if (lastAlpha > 0.01) {
+          ctx.strokeStyle = `rgba(6, 118, 136, ${lastAlpha})`;
+          ctx.lineWidth = 1.0 + lastProg * 0.9;
+          ctx.beginPath();
+          ctx.moveTo(prevMidX, prevMidY);
+          ctx.lineTo(stroke[len - 1].x, stroke[len - 1].y);
+          ctx.stroke();
+        }
+      }
+
+      animRef.current = requestAnimationFrame(renderTrail);
+    };
+
     const sync = () => {
       const active = fine.matches && !reduced.matches;
       setEnabled(active);
       document.documentElement.classList.remove("drafting-cursor-active");
       if (ref.current) ref.current.dataset['visible'] = "false";
+      if (!active) clearTrail();
     };
+
     const hide = () => {
       if (ref.current) ref.current.dataset['visible'] = "false";
       document.documentElement.classList.remove("drafting-cursor-active");
+      clearTrail();
     };
+
     const move = (event: PointerEvent) => {
       const cursor = ref.current;
       if (!cursor || !fine.matches || reduced.matches || event.pointerType !== "mouse") return;
@@ -291,6 +471,24 @@ export function ArchitectureCursor() {
       cursor.dataset['visible'] = "true";
       cursor.dataset['interactive'] = String(Boolean(target?.closest('a, button, [role="button"]')));
       document.documentElement.classList.add("drafting-cursor-active");
+
+      // Motion Trail tracing
+      if (canvasRef.current && canvasRef.current.width === 0) {
+        updateCanvasSize();
+      }
+      const now = performance.now();
+      const points = pointsRef.current;
+      const last = points[points.length - 1];
+      const dist = last ? Math.hypot(event.clientX - last.x, event.clientY - last.y) : 999;
+
+      if (dist >= 2.5) {
+        const isStart = !last || (now - last.time > 90);
+        points.push({ x: event.clientX, y: event.clientY, time: now, isStart });
+
+        if (!animRef.current) {
+          animRef.current = requestAnimationFrame(renderTrail);
+        }
+      }
 
       // Smooth dynamic tilt of arrow along cursor movement
       if (arrowRef.current && !reduced.matches) {
@@ -312,16 +510,21 @@ export function ArchitectureCursor() {
         }
       }
     };
+
     const press = () => { if (ref.current) ref.current.dataset['pressed'] = "true"; };
     const release = () => { if (ref.current) ref.current.dataset['pressed'] = "false"; };
+
     sync();
+
     fine.addEventListener("change", sync);
     reduced.addEventListener("change", sync);
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", press);
     window.addEventListener("pointerup", release);
     window.addEventListener("blur", hide);
+    window.addEventListener("resize", updateCanvasSize);
     document.documentElement.addEventListener("pointerleave", hide);
+
     return () => {
       hide();
       fine.removeEventListener("change", sync);
@@ -330,40 +533,63 @@ export function ArchitectureCursor() {
       window.removeEventListener("pointerdown", press);
       window.removeEventListener("pointerup", release);
       window.removeEventListener("blur", hide);
+      window.removeEventListener("resize", updateCanvasSize);
       document.documentElement.removeEventListener("pointerleave", hide);
       if (idleTimer.current) clearTimeout(idleTimer.current);
+      if (animRef.current) cancelAnimationFrame(animRef.current);
     };
   }, []);
 
+  useEffect(() => {
+    if (enabled && canvasRef.current) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvasRef.current.width = Math.round(w * dpr);
+      canvasRef.current.height = Math.round(h * dpr);
+      const ctx = canvasRef.current.getContext("2d");
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+  }, [enabled]);
+
   if (!enabled) return null;
   return (
-    <div ref={ref} className="architecture-cursor" aria-hidden="true" data-visible="false">
-      {/* Precision Drafting Arrow Pointer that moves along with cursor */}
-      <svg
-        ref={arrowRef}
-        viewBox="0 0 24 24"
-        fill="none"
-        className="architecture-cursor-arrow"
-      >
-        <path
-          d="M2 2L19 8.5L11.5 11.5L8.5 19L2 2Z"
-          fill="currentColor"
-          stroke="#ffffff"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-        <circle cx="2" cy="2" r="1.5" fill="#ffffff" />
-      </svg>
+    <>
+      {/* Dynamic Smooth Motion Trail tracing cursor movement */}
+      <canvas
+        ref={canvasRef}
+        className="architecture-cursor-trail"
+        aria-hidden="true"
+      />
 
-      {/* Architectural Crosshair Reticle */}
-      <svg viewBox="0 0 48 48" fill="none" className="architecture-cursor-mark">
-        <path className="drafting-axis" d="M24 2v15m0 14v15M2 24h15m14 0h15" />
-        <path className="drafting-ticks" d="M20 8h8M20 40h8M8 20v8M40 20v8" />
-        <path className="drafting-frame" d="M14 19v-5h5m10 0h5v5m0 10v5h-5m-10 0h-5v-5" />
-        <path className="drafting-center" d="M21 24h6m-3-3v6" />
-      </svg>
-    </div>
+      <div ref={ref} className="architecture-cursor" aria-hidden="true" data-visible="false">
+        {/* Precision Drafting Arrow Pointer that moves along with cursor */}
+        <svg
+          ref={arrowRef}
+          viewBox="0 0 24 24"
+          fill="none"
+          className="architecture-cursor-arrow"
+        >
+          <path
+            d="M2 2L19 8.5L11.5 11.5L8.5 19L2 2Z"
+            fill="currentColor"
+            stroke="#ffffff"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+          <circle cx="2" cy="2" r="1.5" fill="#ffffff" />
+        </svg>
+
+        {/* Architectural Crosshair Reticle (with spacing from arrow) */}
+        <svg viewBox="0 0 48 48" fill="none" className="architecture-cursor-mark">
+          <path className="drafting-axis" d="M24 2v15m0 14v15M2 24h15m14 0h15" />
+          <path className="drafting-ticks" d="M20 8h8M20 40h8M8 20v8M40 20v8" />
+          <path className="drafting-frame" d="M14 19v-5h5m10 0h5v5m0 10v5h-5m-10 0h-5v-5" />
+          <path className="drafting-center" d="M21 24h6m-3-3v6" />
+        </svg>
+      </div>
+    </>
   );
 }
 
