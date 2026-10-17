@@ -6,8 +6,10 @@ export function Projects() {
   return (
     <section id="projects" className="relative bg-[#F8FBFB] py-20 sm:py-28">
       {/* Ambient architectural lighting */}
-      <div className="pointer-events-none absolute -top-32 -left-32 h-[450px] w-[450px] rounded-full bg-[#35A9C1]/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-[#007C91]/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-32 -left-32 h-[450px] w-[450px] rounded-full bg-[#35A9C1]/10 blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-[#007C91]/10 blur-3xl" />
+      </div>
 
       {/* Section header */}
       <div className="relative z-10 mx-auto w-full max-w-3xl px-6 text-center">

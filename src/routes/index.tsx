@@ -38,7 +38,7 @@ function Index() {
     <>
       <Header />
       <SocialRail />
-      <main>
+      <main className="overflow-x-clip">
         <Hero />
         <About />
         <Vastu />

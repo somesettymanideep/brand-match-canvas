@@ -45,6 +45,9 @@ import p4 from "@/assets/p4.jpg";
 import avatarPriya from "@/assets/avatar-priya.png";
 import avatarRamesh from "@/assets/avatar-ramesh.png";
 import avatarAnjali from "@/assets/avatar-anjali.png";
+import testimonialAlbert from "@/assets/testimonial-albert.jpg";
+import testimonialDarrell from "@/assets/testimonial-darrell.jpg";
+import testimonialKristin from "@/assets/testimonial-kristin.jpg";
 import contactBg from "@/assets/contact-bg.png";
 
 const Container = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -718,38 +721,52 @@ export function Services() {
 /* ---------------- TESTIMONIALS ---------------- */
 const TESTIMONIALS_DATA = [
   {
+    name: "Albert Flores",
+    role: "Commercial Project Manager",
+    quote: "The team’s ability to turn our vision into a reality exceeded all expectations. Their attention to detail and innovative designs made our project truly unique.",
+    avatar: testimonialAlbert,
+    rating: 5,
+  },
+  {
+    name: "Darrell Steward",
+    role: "Real Estate Director",
+    quote: "Their innovative approach to sustainable design was impressive. We are proud to have a space that not only looks great but also respects the environment.",
+    avatar: testimonialDarrell,
+    rating: 5,
+  },
+  {
+    name: "Kristin Watson",
+    role: "Project Manager",
+    quote: "Working with SEA Studio was a fantastic experience. Their expertise, professionalism, and commitment to quality were evident every step of the way.",
+    avatar: testimonialKristin,
+    rating: 5,
+  },
+  {
     name: "Priya Sharma",
     role: "Homeowner, Vijayawada",
     quote: "SEA transformed our dream home into a beautiful reality. Their attention to detail and professionalism is truly commendable.",
     avatar: avatarPriya,
     rating: 5,
   },
-  {
-    name: "Ramesh Kumar",
-    role: "Business Owner, Hyderabad",
-    quote: "Excellent design, great team and on-time delivery. We are extremely happy with the outcome.",
-    avatar: avatarRamesh,
-    rating: 5,
-  },
-  {
-    name: "Anjali Rao",
-    role: "Villa Owner, Guntur",
-    quote: "The landscape design they created has completely changed the look and feel of our property. Highly recommended!",
-    avatar: avatarAnjali,
-    rating: 5,
-  },
 ];
 
 export function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [activePage, setActivePage] = useState(0);
+  const cardsPerPage = 2;
+  const totalPages = Math.ceil(TESTIMONIALS_DATA.length / cardsPerPage);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS_DATA.length - 1 : prev - 1));
+  const prevPage = () => {
+    setActivePage((prev) => (prev === 0 ? totalPages - 1 : prev - 1));
   };
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === TESTIMONIALS_DATA.length - 1 ? 0 : prev + 1));
+  const nextPage = () => {
+    setActivePage((prev) => (prev === totalPages - 1 ? 0 : prev + 1));
   };
+
+  const visibleTestimonials = TESTIMONIALS_DATA.slice(
+    activePage * cardsPerPage,
+    activePage * cardsPerPage + cardsPerPage
+  );
 
   return (
     <section id="testimonials" className="relative overflow-hidden bg-[#03343d] py-24 lg:py-32 text-white">
@@ -778,8 +795,8 @@ export function Testimonials() {
         <div className="relative mt-14 sm:mt-16">
           {/* Navigation Arrow Left */}
           <button
-            onClick={prevSlide}
-            aria-label="Previous testimonial"
+            onClick={prevPage}
+            aria-label="Previous testimonials"
             className="absolute -left-4 sm:-left-6 top-1/2 -translate-y-1/2 z-20 hidden md:flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 hover:bg-white hover:text-[#03343d] hover:scale-105"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -787,54 +804,52 @@ export function Testimonials() {
 
           {/* Navigation Arrow Right */}
           <button
-            onClick={nextSlide}
-            aria-label="Next testimonial"
+            onClick={nextPage}
+            aria-label="Next testimonials"
             className="absolute -right-4 sm:-right-6 top-1/2 -translate-y-1/2 z-20 hidden md:flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 hover:bg-white hover:text-[#03343d] hover:scale-105"
           >
             <ArrowRight className="h-5 w-5" />
           </button>
 
-          {/* Testimonial Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {TESTIMONIALS_DATA.map((t, idx) => (
+          {/* 2-Column Horizontal Cards Grid perfectly matching reference layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            {visibleTestimonials.map((t) => (
               <div
                 key={t.name}
-                className={`group relative flex flex-col justify-between rounded-2xl bg-white p-7 sm:p-8 text-slate-800 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-cyan/10 ${
-                  idx === currentIndex ? "ring-2 ring-[#38d9c0]/50" : ""
-                }`}
+                className="group relative flex flex-col sm:flex-row items-center gap-5 sm:gap-6 rounded-[22px] border border-slate-200/90 bg-white p-4 sm:p-5 lg:p-6 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)]"
               >
-                <div>
-                  {/* Avatar + Rating */}
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative h-16 w-16 overflow-hidden rounded-full ring-4 ring-[#03343d]/10 shadow-md">
-                      <img
-                        src={t.avatar}
-                        alt={t.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <div className="mt-4 flex items-center justify-center gap-1">
-                      {Array.from({ length: t.rating }).map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Quote Text */}
-                  <p className="mt-5 text-center text-sm sm:text-[0.925rem] leading-relaxed text-slate-600 font-normal italic">
-                    "{t.quote}"
-                  </p>
+                {/* Left side: Rectangular Portrait (aspect 3:4 matching 157x206 reference image) */}
+                <div className="relative aspect-[3/4] w-full sm:w-36 md:w-40 lg:w-44 xl:w-48 shrink-0 overflow-hidden rounded-[14px] bg-slate-100 shadow-sm">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
                 </div>
 
-                {/* Author Info */}
-                <div className="mt-6 border-t border-slate-100 pt-4 text-center">
-                  <h3 className="font-serif text-base font-bold text-[#03343d]">
-                    {t.name}
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    {t.role}
+                {/* Right side: Vertically Centered Content with exact spacing */}
+                <div className="flex flex-1 flex-col justify-center py-1 text-left">
+                  {/* 5 Teal Rating Stars */}
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-[#067688] text-[#067688]" />
+                    ))}
+                  </div>
+
+                  {/* Testimonial Quote */}
+                  <p className="mt-3 text-xs sm:text-[0.875rem] leading-[1.65] text-[#334155] font-normal">
+                    “{t.quote}”
                   </p>
+
+                  {/* Author Name and Role */}
+                  <div className="mt-4 sm:mt-5">
+                    <h3 className="font-sans text-sm sm:text-base font-bold text-[#0e2638] tracking-tight">
+                      {t.name}
+                    </h3>
+                    <p className="mt-0.5 text-xs font-semibold text-[#067688]">
+                      {t.role}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -842,13 +857,13 @@ export function Testimonials() {
 
           {/* Pagination Indicators */}
           <div className="mt-10 flex items-center justify-center gap-2.5">
-            {TESTIMONIALS_DATA.map((_, idx) => (
+            {Array.from({ length: totalPages }).map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                aria-label={`Go to testimonial ${idx + 1}`}
+                onClick={() => setActivePage(idx)}
+                aria-label={`Go to testimonials page ${idx + 1}`}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
-                  idx === currentIndex ? "w-8 bg-[#38d9c0]" : "w-2.5 bg-white/30 hover:bg-white/50"
+                  idx === activePage ? "w-8 bg-[#38d9c0]" : "w-2.5 bg-white/30 hover:bg-white/50"
                 }`}
               />
             ))}
@@ -991,15 +1006,17 @@ export function Contact() {
       </div>
 
       {/* Subtle Blueprint Grid Background & Ambient Lighting */}
-      <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.03] bg-[linear-gradient(to_right,#007C91_1px,transparent_1px),linear-gradient(to_bottom,#007C91_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]" />
-      <div className="pointer-events-none absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-[#35A9C1]/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rounded-full bg-[#007C91]/15 blur-3xl" />
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[650px] w-[650px] rounded-full bg-[#007C91]/5 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#007C91_1px,transparent_1px),linear-gradient(to_bottom,#007C91_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]" />
+        <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-[#35A9C1]/15 blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 h-[480px] w-[480px] rounded-full bg-[#007C91]/15 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[650px] w-[650px] rounded-full bg-[#007C91]/5 blur-[120px]" />
+      </div>
 
       <Container className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-start">
           {/* ================= LEFT COLUMN: Premium Consultation Form (55%) ================= */}
-          <div>
+          <div className="min-w-0">
             {/* Eyebrow */}
             <div data-reveal className="reveal flex items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#007C91]/20 bg-[#007C91]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#007C91]">
@@ -1275,7 +1292,7 @@ export function Contact() {
           </div>
 
           {/* ================= RIGHT COLUMN: Premium FAQ Accordion (45%) ================= */}
-          <div className="lg:pl-2">
+          <div className="min-w-0 lg:pl-2">
             {/* Eyebrow */}
             <div data-reveal className="reveal flex items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#007C91]/20 bg-[#007C91]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#007C91]">

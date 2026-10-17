@@ -340,7 +340,7 @@ export function ArchitectureCursor() {
 
 export function Footer() {
   return (
-    <footer className="bg-teal-deep text-ivory/80">
+    <footer className="relative overflow-hidden bg-teal-deep text-ivory/80">
       <div className="mx-auto max-w-[1400px] px-6 py-20 lg:px-10">
         <div className="mb-16 flex flex-col items-start justify-between gap-6 border-b border-ivory/15 pb-16 md:flex-row md:items-end">
           <h2 className="max-w-2xl text-4xl text-ivory md:text-6xl">Let's shape your next space together.</h2>
