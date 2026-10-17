@@ -14,6 +14,10 @@
   padding-inline: clamp(1rem, 6%, 5rem);
 }
 
+.scroll-stack--container-spaced .scroll-stack__inner {
+  padding-inline: 0;
+}
+
 .scroll-stack__slot {
   position: sticky;
 }
