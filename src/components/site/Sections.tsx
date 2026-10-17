@@ -111,12 +111,32 @@ const HERO_DISCIPLINES = [
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const selectDiscipline = (index: number) => {
-    if (index === activeIndex) return;
-    setPrevIndex(activeIndex);
-    setActiveIndex(index);
-  };
+  const selectDiscipline = useCallback((index: number) => {
+    setActiveIndex((current) => {
+      if (index === current) return current;
+      setPrevIndex(current);
+      return index;
+    });
+  }, []);
+
+  const nextDiscipline = useCallback(() => {
+    setActiveIndex((current) => {
+      const next = (current + 1) % HERO_DISCIPLINES.length;
+      setPrevIndex(current);
+      return next;
+    });
+  }, []);
+
+  // Autoplay carousel with continuous loop mode
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      nextDiscipline();
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isPaused, nextDiscipline]);
 
   const active = HERO_DISCIPLINES[activeIndex];
   const previous = HERO_DISCIPLINES[prevIndex ?? activeIndex];
@@ -124,6 +144,8 @@ export function Hero() {
   return (
     <section
       id="home"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       className="relative min-h-[100svh] overflow-hidden text-[#0E2638] flex flex-col justify-between pt-28 pb-8 sm:pt-32 sm:pb-10 lg:pt-32 lg:pb-8 selection:bg-cyan/25"
     >
       {/* Background Architectural Blueprint Image */}
@@ -140,64 +162,36 @@ export function Hero() {
       <Container className="relative z-10 w-full flex-1 flex flex-col justify-center my-auto">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-14 items-center">
           
-          {/* Left Column: Architectural Building Model Image Showcase */}
-          <div className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center relative">
-            <div className="relative w-full max-w-[620px] lg:max-w-none aspect-[16/11] sm:aspect-[16/10] flex items-center justify-center">
+          {/* Left Column: Enlarged Centered Architectural Image Showcase */}
+          <div className="lg:col-span-7 xl:col-span-7 flex justify-center items-center relative">
+            <div className="relative w-full h-[420px] sm:h-[480px] md:h-[540px] lg:h-[600px] xl:h-[680px] 2xl:h-[740px] flex items-center justify-center">
               <PixelSwap
                 key={activeIndex}
                 firstContent={
                   <img
                     src={previous.img}
                     alt={previous.alt}
-                    className="h-full w-full object-contain object-left-bottom select-none drop-shadow-[0_20px_35px_rgba(0,124,145,0.2)]"
+                    className="h-full w-full object-contain object-center select-none drop-shadow-[0_25px_45px_rgba(0,124,145,0.24)] transition-opacity duration-700 ease-in-out"
                   />
                 }
                 secondContent={
                   <img
                     src={active.img}
                     alt={active.alt}
-                    className="h-full w-full object-contain object-left-bottom select-none drop-shadow-[0_20px_35px_rgba(0,124,145,0.2)]"
+                    className="h-full w-full object-contain object-center select-none drop-shadow-[0_25px_45px_rgba(0,124,145,0.24)] transition-opacity duration-700 ease-in-out animate-hero-fade"
                   />
                 }
                 active={prevIndex !== null}
                 trigger="manual"
-                pixelSize={45}
-                duration={750}
-                pixelDuration={280}
+                pixelSize={24}
+                duration={850}
+                pixelDuration={400}
+                fade={true}
                 pattern="random"
-                pixelScale={0.35}
+                pixelScale={0.15}
                 aspectRatio="auto"
-                className="h-full w-full"
+                className="h-full w-full flex items-center justify-center"
               />
-            </div>
-
-            {/* Decorative SEA Brand Turquoise 3D Prism / Cursor Accent */}
-            <div className="hidden lg:flex items-center gap-1 absolute -right-4 xl:-right-6 top-[50%] z-20 pointer-events-none select-none drop-shadow-lg">
-              <div className="relative">
-                <svg width="42" height="42" viewBox="0 0 42 42" fill="none" className="transition-transform duration-500 hover:rotate-6">
-                  {/* Top Face */}
-                  <path d="M21 5L36 32H6L21 5Z" fill="#00A2B8" fillOpacity="0.85" />
-                  {/* Right shaded facet */}
-                  <path d="M21 5L36 32L21 26V5Z" fill="#007C91" />
-                  {/* Left highlight facet */}
-                  <path d="M21 5L6 32L21 26V5Z" fill="#38D9C0" />
-                </svg>
-                {/* Pointer cursor icon */}
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="#0E2638"
-                  className="absolute -bottom-1 -right-1 drop-shadow-sm"
-                >
-                  <path
-                    d="M3 3L10.07 19.97L12.58 13.58L18.97 11.07L3 3Z"
-                    stroke="#ffffff"
-                    strokeWidth="1.5"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
             </div>
           </div>
 

@@ -7,6 +7,11 @@ import p3 from "@/assets/p3.jpg";
 import p4 from "@/assets/p4.jpg";
 import p5 from "@/assets/p5.jpg";
 import p6 from "@/assets/p6.jpg";
+import projectGravityCentral from "@/assets/project-gravity-central.jpg";
+import projectGangadharEstate from "@/assets/project-gangadhar-estate.webp";
+import projectKrishnaSindhura from "@/assets/project-krishna-sindhura.webp";
+import projectMallikarjunReddy from "@/assets/project-mallikarjun-reddy.webp";
+import projectChandramouliResidence from "@/assets/project-chandramouli-residence.jpg";
 
 export const NAV = [
   { id: "home", label: "Home" },
@@ -47,46 +52,39 @@ export const SLIDES = [
 
 export const PROJECTS = [
   {
-    img: p1,
-    title: "Modern Residence",
+    img: projectGravityCentral,
+    title: "Gravity Central",
+    cat: "Interior",
+    loc: "Hyderabad, TS",
+    concept: "Curvilinear illuminated ceiling coves, sculptural feather lighting, and a bespoke luxury bedroom suite crafted for contemporary elegance.",
+  },
+  {
+    img: projectGangadharEstate,
+    title: "Gangadhar Estate",
     cat: "Architecture",
     loc: "Vijayawada",
-    concept: "Pure white volumes softened by timber screens that filter light and frame privacy.",
+    concept: "Sculptural multi-level commercial complex featuring organic parametric louvers, panoramic glass envelopes, and civic pedestrian forecourts.",
   },
   {
-    img: p2,
-    title: "Luxury Sky Penthouse",
-    cat: "Interior Design",
-    loc: "Hyderabad",
-    concept: "A layered composition of veined stone, brass and soft curves above the city.",
-  },
-  {
-    img: p3,
-    title: "Modern Horizon Villa",
+    img: projectKrishnaSindhura,
+    title: "Krishna Sindhura Hospital",
     cat: "Architecture",
-    loc: "Bengaluru",
-    concept: "A low horizontal pavilion that dissolves into the horizon through an infinity edge.",
+    loc: "Hyderabad",
+    concept: "Modern healthcare architectural landmark defined by a central bio-climatic glass dome atrium, dual clinical towers, and integrated healing environments.",
   },
   {
-    img: p4,
-    title: "Landscape & Outdoor Living",
+    img: projectMallikarjunReddy,
+    title: "Mallikarjun Reddy",
+    cat: "Interior",
+    loc: "Hyderabad",
+    concept: "Timeless neoclassical bedroom interior featuring botanical landscape triptych art, fluted panels, warm walnut accents, and serene natural lighting.",
+  },
+  {
+    img: projectChandramouliResidence,
+    title: "Chandramouli Residence",
     cat: "Landscape",
-    loc: "Amaravati",
-    concept: "Native planting, stepping stones and a timber pergola for unhurried outdoor life.",
-  },
-  {
-    img: p5,
-    title: "Commercial Landmark",
-    cat: "Commercial",
-    loc: "Visakhapatnam",
-    concept: "A rhythmic façade of vertical fins balancing daylight, shade and identity.",
-  },
-  {
-    img: p6,
-    title: "Bespoke Residence Interiors",
-    cat: "Interior Design",
-    loc: "Guntur",
-    concept: "Custom joinery and warm, concealed lighting crafting a quiet retreat.",
+    loc: "Chimakurthy",
+    concept: "Expansive residential landscape design uniting a terracotta garden gazebo, vibrant floral beds, tropical palm clusters, and rustic stone pathways.",
   },
 ];
 
