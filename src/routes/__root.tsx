@@ -103,6 +103,32 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var isReload = false;
+                try {
+                  var nav = performance.getEntriesByType('navigation');
+                  if (nav && nav.length > 0) {
+                    isReload = nav[0].type === 'reload';
+                  } else if (performance.navigation) {
+                    isReload = performance.navigation.type === 1;
+                  }
+                } catch(e) {}
+                if (isReload) {
+                  sessionStorage.removeItem('sea_intro_played');
+                }
+                var force = window.location.search.indexOf('intro=1') !== -1;
+                var played = sessionStorage.getItem('sea_intro_played') === 'true';
+                var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if ((force || !played) && !reduced) {
+                  document.documentElement.classList.add('intro-active');
+                }
+              } catch(e) {}
+            `,
+          }}
+        />
       </head>
       <body>
         {children}

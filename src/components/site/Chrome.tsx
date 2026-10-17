@@ -52,6 +52,7 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-10">
         <a
+          id="header-logo"
           href="#home"
           className={`shrink-0 overflow-hidden rounded-[5px] transition-all duration-300 hover:scale-105 ${
             scrolled ? "bg-ivory/95 px-3.5 py-1.5 shadow-sm" : "bg-white/80 px-3.5 py-1.5 shadow-sm border border-[#0E2638]/10 backdrop-blur-sm"
@@ -59,6 +60,7 @@ export function Header() {
           aria-label="STUQ home"
         >
           <img
+            id="header-logo-img"
             src={logo}
             alt="STUQ – Studio for Eclectic Architecture"
             className={`w-auto transition-all duration-500 ${scrolled ? "h-8" : "h-9"}`}

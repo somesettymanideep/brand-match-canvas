@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useRevealAll } from "@/hooks/use-reveal";
 import { Header, SocialRail, BackToTop, ArchitectureCursor, Footer } from "@/components/site/Chrome";
 import { Hero, About, Vastu, Projects, Services, Testimonials, Contact } from "@/components/site/Sections";
+import { IntroPreloader } from "@/components/site/IntroPreloader";
 
 const TITLE = "STUQ – Studio for Eclectic Architecture";
 const DESC = "Architecture, interiors, landscape and Vastu-informed design by STUQ. Spaces shaped by creativity, precision and purpose.";
@@ -36,6 +37,7 @@ function Index() {
   useRevealAll();
   return (
     <>
+      <IntroPreloader />
       <Header />
       <SocialRail />
       <main className="overflow-x-clip">
