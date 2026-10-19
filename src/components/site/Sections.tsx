@@ -405,7 +405,19 @@ export function About() {
     if (!video) return;
     const sync = () => setIsMuted(video.muted);
     video.addEventListener("volumechange", sync);
-    return () => video.removeEventListener("volumechange", sync);
+    // Start the film once it scrolls into view; rest it when it scrolls away.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) void video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(video);
+    return () => {
+      video.removeEventListener("volumechange", sync);
+      io.disconnect();
+    };
   }, []);
 
   const toggleSound = () => {
