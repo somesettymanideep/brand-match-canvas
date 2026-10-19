@@ -533,38 +533,7 @@ export function About() {
   );
 }
 
-/* ---------------- VASTU SHASTRA ICONS ---------------- */
-const LotusIcon = ({ className = "h-7 w-7" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 21c-4-4-8-7-8-11a8 8 0 0 1 16 0c0 4-4 7-8 11z" opacity="0.25" fill="currentColor" />
-    <path d="M12 4c-2 3-3.5 6.5-3.5 10 0 2.5 1.5 4.5 3.5 7 2-2.5 3.5-4.5 3.5-7 0-3.5-1.5-7-3.5-10z" strokeWidth="1.8" />
-    <path d="M12 14c-3-2-6-2.5-8-1 0 3.5 3 6.5 8 8" />
-    <path d="M12 14c3-2 6-2.5 8-1 0 3.5-3 6.5-8 8" />
-    <path d="M8 17c-3 0-5-1-5-3 0-3 3-4 5-3" opacity="0.6" />
-    <path d="M16 17c3 0 5-1 5-3 0-3-3-4-5-3" opacity="0.6" />
-  </svg>
-);
 
-const MeditateIcon = ({ className = "h-7 w-7" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <circle cx="12" cy="5" r="2.2" strokeWidth="1.8" />
-    <path d="M12 8v5.5" strokeWidth="1.8" />
-    <path d="M8.5 11.5l3.5 2 3.5-2" />
-    <path d="M7 17.5c1.5-1.2 3-2 5-2s3.5.8 5 2" />
-    <path d="M5.5 19.5c2-1.5 4-2 6.5-2s4.5.5 6.5 2" strokeWidth="1.8" />
-    <path d="M8 13.5l-3.5 4" />
-    <path d="M16 13.5l3.5 4" />
-  </svg>
-);
-
-const ProsperityIcon = ({ className = "h-7 w-7" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 21V10" strokeWidth="1.8" />
-    <path d="M12 10c0-4.5 3.5-7 8-7 0 4.5-2.5 8-8 8z" fill="currentColor" fillOpacity="0.15" />
-    <path d="M12 13.5c0-3.5-2.5-6-6-6 0 3.5 2 6 6 6z" fill="currentColor" fillOpacity="0.15" />
-    <path d="M12 17c0-2.5 2-4 4.5-4 0 2.5-1.5 4-4.5 4z" opacity="0.7" />
-  </svg>
-);
 
 /* ---------------- VASTU ---------------- */
 export function Vastu() {
@@ -614,51 +583,7 @@ export function Vastu() {
               cosmic forces that govern our lives, making it a vital concept in modern design.
             </p>
 
-            {/* 3 Pillars in a single row */}
-            <div
-              data-reveal
-              className="reveal mt-8 grid grid-cols-3 gap-3 sm:gap-6"
-              style={{ "--d": "400ms" } as React.CSSProperties}
-            >
-              {/* 1. BALANCE */}
-              <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <LotusIcon className="h-7 w-7 text-[#067688]" />
-                </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
-                  BALANCE
-                </h3>
-                <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
-                  Harmonizes energy in your space
-                </p>
-              </div>
 
-              {/* 2. WELL-BEING */}
-              <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <MeditateIcon className="h-7 w-7 text-[#067688]" />
-                </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
-                  WELL-BEING
-                </h3>
-                <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
-                  Supports physical, mental & emotional health
-                </p>
-              </div>
-
-              {/* 3. PROSPERITY */}
-              <div className="flex flex-col items-center text-center">
-                <div className="grid h-16 w-16 place-items-center rounded-full border border-[#067688]/20 bg-gradient-to-b from-[#f0f8fa] to-[#e0f3f6] text-[#067688] shadow-sm transition-transform duration-300 hover:scale-105 sm:h-18 sm:w-18">
-                  <ProsperityIcon className="h-7 w-7 text-[#067688]" />
-                </div>
-                <h3 className="mt-3 text-xs font-extrabold uppercase tracking-wider text-[#0e2638]">
-                  PROSPERITY
-                </h3>
-                <p className="mt-1 text-[0.72rem] leading-snug text-[#736B63]">
-                  Creates positive vibrations for growth
-                </p>
-              </div>
-            </div>
 
             {/* Read More Button */}
             <div data-reveal className="reveal mt-9" style={{ "--d": "500ms" } as React.CSSProperties}>

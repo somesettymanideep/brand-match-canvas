@@ -111,6 +111,11 @@ export function Projects() {
               <span className="text-[#0e2638]">PROJECTS</span>
             </h2>
 
+            {/* Paragraph Text */}
+            <p className="mt-5 max-w-lg text-sm sm:text-base leading-relaxed text-[#597080] font-normal">
+              Explore our diverse portfolio of residential retreats, commercial landmarks, and healthcare spaces designed with environmental harmony, structural precision, and timeless elegance.
+            </p>
+
             {/* Compact rounded button */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
