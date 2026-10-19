@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, MapPin, Building2, Layers, Trees } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "./data";
@@ -26,19 +26,30 @@ export function Projects() {
 
       if (!section || !viewingArea || !track || !firstCard) return;
 
+      const getMetrics = () => {
+        const vh = window.innerHeight;
+        const cardH = firstCard.offsetHeight || 480;
+        const computedTrack = window.getComputedStyle(track);
+        const gap = parseFloat(computedTrack.rowGap || computedTrack.gap) || 80;
+        const startY = (vh - cardH) / 2;
+        const totalTravel = (PROJECTS.length - 1) * (cardH + gap);
+        return { vh, cardH, gap, startY, totalTravel };
+      };
+
+      // Position Card 0 vertically centered in the viewport initially
+      const initialMetrics = getMetrics();
+      gsap.set(track, { y: initialMetrics.startY });
+
       const tween = gsap.to(track, {
         y: () => {
-          const cardHeight = firstCard.offsetHeight;
-          const computedTrack = window.getComputedStyle(track);
-          const gap = parseFloat(computedTrack.rowGap || computedTrack.gap) || 32;
-          viewingArea.style.height = `${cardHeight}px`;
-          return -((PROJECTS.length - 1) * (cardHeight + gap));
+          const m = getMetrics();
+          return m.startY - m.totalTravel;
         },
         ease: "none",
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: () => `+=${(PROJECTS.length - 1) * 750}`,
+          end: () => `+=${(PROJECTS.length - 1) * 900}`,
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -62,7 +73,6 @@ export function Projects() {
         ro.disconnect();
         if (tween?.scrollTrigger) tween.scrollTrigger.kill();
         tween?.kill();
-        viewingArea.style.height = "";
         gsap.set(track, { clearProps: "all" });
       };
     });
@@ -72,11 +82,18 @@ export function Projects() {
     };
   }, []);
 
+  const getDisciplineIcon = (cat: string) => {
+    const lower = cat.toLowerCase();
+    if (lower.includes("interior")) return Layers;
+    if (lower.includes("landscape")) return Trees;
+    return Building2;
+  };
+
   return (
     <section
       id="projects"
       ref={sectionRef}
-      className="relative bg-[#F9FBFC] py-20 lg:py-0 lg:h-screen lg:min-h-[720px] lg:flex lg:items-center overflow-hidden"
+      className="relative bg-[#F9FBFC] py-20 lg:py-0 lg:h-screen lg:overflow-hidden"
     >
       {/* Ambient architectural lighting */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -84,27 +101,15 @@ export function Projects() {
         <div className="absolute -bottom-32 -right-32 h-[500px] w-[500px] rounded-full bg-[#007C91]/5 blur-3xl" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-12 lg:pt-16">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 h-full">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-20 h-full">
           {/* Left Column: Stationary content */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            {/* Small eyebrow label */}
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#067688]" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#067688]">
-                Selected Portfolio
-              </span>
-            </div>
-
-            {/* Large heading */}
-            <h2 className="mt-4 font-serif text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.65rem] font-normal leading-[1.12] tracking-tight text-[#0E2638]">
-              Crafting Visionary Architecture &amp; Living Spaces.
+          <div className="lg:col-span-5 flex flex-col justify-center py-6">
+            {/* Heading */}
+            <h2 className="font-serif text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.65rem] font-normal leading-[1.12] tracking-tight">
+              <span className="text-[#067688]">OUR RECENT</span>{" "}
+              <span className="text-[#0e2638]">PROJECTS</span>
             </h2>
-
-            {/* Short description */}
-            <p className="mt-5 max-w-lg text-sm sm:text-base leading-relaxed text-[#597080] font-normal">
-              Explore our diverse portfolio of residential, commercial, and healthcare spaces designed with environmental harmony, structural precision, and timeless elegance.
-            </p>
 
             {/* Compact rounded button */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -135,57 +140,64 @@ export function Projects() {
             </div>
           </div>
 
-          {/* Right Column: Viewing window & vertically sliding cards */}
-          <div className="lg:col-span-7 flex justify-center">
+          {/* Right Column: Full-height viewport for sliding cards */}
+          <div
+            ref={viewingAreaRef}
+            className="lg:col-span-7 h-full lg:h-screen w-full relative overflow-hidden flex justify-center items-center"
+          >
             <div
-              ref={viewingAreaRef}
-              className="relative w-full max-w-[660px] overflow-hidden rounded-2xl sm:rounded-3xl"
+              ref={trackRef}
+              className="lg:absolute inset-x-0 top-0 flex flex-col items-center gap-16 xl:gap-20 w-full will-change-transform"
             >
-              <div
-                ref={trackRef}
-                className="flex flex-col gap-8 w-full"
-              >
-                {PROJECTS.map((project, idx) => (
+              {PROJECTS.map((project, idx) => {
+                const Icon = getDisciplineIcon(project.cat);
+                return (
                   <div
                     key={project.title}
                     ref={idx === 0 ? firstCardRef : null}
-                    className="group relative w-full shrink-0 overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/85 bg-white shadow-[0_12px_40px_rgba(11,59,70,0.07)] transition-shadow duration-300 hover:shadow-[0_16px_50px_rgba(11,59,70,0.11)]"
+                    className="w-full max-w-[640px] xl:max-w-[680px] shrink-0 overflow-hidden rounded-[7px] border border-slate-200/90 bg-white shadow-none transition-transform duration-500"
                   >
-                    {/* Landscape image */}
-                    <div className="relative aspect-[16/10] max-h-[48vh] w-full overflow-hidden bg-slate-100">
+                    {/* Landscape Image */}
+                    <div className="relative aspect-[16/9.8] max-h-[46vh] w-full overflow-hidden bg-slate-100 rounded-t-[7px]">
                       <img
                         src={project.img}
                         alt={project.title}
                         loading={idx === 0 ? "eager" : "lazy"}
-                        className="h-full w-full object-cover object-center select-none transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                        className="h-full w-full object-cover object-center select-none transition-transform duration-700 ease-out hover:scale-[1.02]"
                       />
                     </div>
 
-                    {/* White information strip beneath it */}
-                    <div className="flex items-center justify-between gap-4 border-t border-slate-100 bg-white px-6 py-4.5 sm:px-7 sm:py-5">
-                      <div className="min-w-0 flex items-center gap-3">
-                        <span className="rounded-full bg-[#067688]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#067688] shrink-0">
-                          {project.cat}
-                        </span>
-                        <h3 className="font-serif text-lg sm:text-xl font-normal text-[#0E2638] tracking-tight truncate">
+                    {/* Clean White Information Strip (No shadow, no rating, no area) */}
+                    <div className="flex flex-col gap-4 bg-white p-5 sm:p-6 sm:px-8 sm:flex-row sm:items-center sm:justify-between border-t border-slate-100 rounded-b-[7px]">
+                      {/* Left: Location & Title */}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#067688]">
+                          <MapPin className="h-3.5 w-3.5 text-[#067688] shrink-0" />
+                          <span className="text-[#64748B]">{project.loc}</span>
+                        </div>
+                        <h3 className="mt-1 font-serif text-xl sm:text-2xl font-normal tracking-tight text-[#0E2638] truncate">
                           {project.title}
                         </h3>
                       </div>
 
-                      {/* Compact metadata arranged horizontally */}
-                      <div className="flex items-center gap-3 shrink-0">
-                        <div className="flex items-center gap-1.5 text-xs text-[#597080]">
-                          <MapPin className="h-3.5 w-3.5 text-[#067688]" />
-                          <span className="hidden sm:inline font-medium">{project.loc}</span>
+                      {/* Right: Grey capsule pill with icon and discipline */}
+                      <div className="flex items-center gap-3 rounded-[7px] bg-[#F1F5F8] px-4.5 py-2.5 sm:px-5 sm:py-3 shrink-0">
+                        <div className="grid h-10 w-10 place-items-center rounded-[5px] bg-white text-[#067688] shadow-none shrink-0">
+                          <Icon className="h-4.5 w-4.5" />
                         </div>
-                        <span className="rounded-md border border-slate-200/70 bg-slate-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-[#067688]">
-                          0{idx + 1}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-[11px] font-medium text-[#7A909E] leading-none mb-1">
+                            {project.disciplineLabel}
+                          </span>
+                          <span className="text-xs sm:text-[0.88rem] font-bold text-[#0E2638] leading-tight">
+                            {project.discipline}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
