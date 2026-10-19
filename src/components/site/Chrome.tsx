@@ -320,7 +320,7 @@ export function ArchitectureCursor() {
       const points = pointsRef.current;
 
       // Prune points that have fully faded out
-      while (points.length > 0 && time - points[0]!.time >= TRAIL_DURATION) {
+      while (points.length > 0 && time - points[0].time >= TRAIL_DURATION) {
         points.shift();
       }
 
@@ -339,7 +339,7 @@ export function ArchitectureCursor() {
       const strokes: TrailPoint[][] = [];
       let currentStroke: TrailPoint[] = [];
       for (let i = 0; i < points.length; i++) {
-        const pt = points[i]!;
+        const pt = points[i];
         if (pt.isStart && currentStroke.length > 0) {
           strokes.push(currentStroke);
           currentStroke = [];
@@ -354,37 +354,37 @@ export function ArchitectureCursor() {
       for (const stroke of strokes) {
         const len = stroke.length;
         if (len === 1) {
-          const age = time - stroke[0]!.time;
+          const age = time - stroke[0].time;
           const progress = Math.max(0, 1 - age / TRAIL_DURATION);
           const alpha = progress * 0.75;
           if (alpha > 0.01) {
             ctx.fillStyle = `rgba(6, 118, 136, ${alpha})`;
             ctx.beginPath();
-            ctx.arc(stroke[0]!.x, stroke[0]!.y, 1.2, 0, Math.PI * 2);
+            ctx.arc(stroke[0].x, stroke[0].y, 1.2, 0, Math.PI * 2);
             ctx.fill();
           }
           continue;
         }
 
         if (len === 2) {
-          const age = time - stroke[1]!.time;
+          const age = time - stroke[1].time;
           const progress = Math.max(0, 1 - age / TRAIL_DURATION);
           const alpha = progress * 0.85;
           if (alpha > 0.01) {
             ctx.strokeStyle = `rgba(6, 118, 136, ${alpha})`;
             ctx.lineWidth = 1.0 + progress * 0.8;
             ctx.beginPath();
-            ctx.moveTo(stroke[0]!.x, stroke[0]!.y);
-            ctx.lineTo(stroke[1]!.x, stroke[1]!.y);
+            ctx.moveTo(stroke[0].x, stroke[0].y);
+            ctx.lineTo(stroke[1].x, stroke[1].y);
             ctx.stroke();
           }
           continue;
         }
 
         // Draw smooth quadratic curves through midpoints
-        const mid0X = (stroke[0]!.x + stroke[1]!.x) / 2;
-        const mid0Y = (stroke[0]!.y + stroke[1]!.y) / 2;
-        const age0 = time - stroke[0]!.time;
+        const mid0X = (stroke[0].x + stroke[1].x) / 2;
+        const mid0Y = (stroke[0].y + stroke[1].y) / 2;
+        const age0 = time - stroke[0].time;
         const prog0 = Math.max(0, 1 - age0 / TRAIL_DURATION);
         const alpha0 = prog0 * 0.8;
 
@@ -392,7 +392,7 @@ export function ArchitectureCursor() {
           ctx.strokeStyle = `rgba(6, 118, 136, ${alpha0})`;
           ctx.lineWidth = 0.9 + prog0 * 0.8;
           ctx.beginPath();
-          ctx.moveTo(stroke[0]!.x, stroke[0]!.y);
+          ctx.moveTo(stroke[0].x, stroke[0].y);
           ctx.lineTo(mid0X, mid0Y);
           ctx.stroke();
         }
@@ -401,9 +401,9 @@ export function ArchitectureCursor() {
         let prevMidY = mid0Y;
 
         for (let i = 1; i < len - 1; i++) {
-          const nextMidX = (stroke[i]!.x + stroke[i + 1]!.x) / 2;
-          const nextMidY = (stroke[i]!.y + stroke[i + 1]!.y) / 2;
-          const age = time - stroke[i]!.time;
+          const nextMidX = (stroke[i].x + stroke[i + 1].x) / 2;
+          const nextMidY = (stroke[i].y + stroke[i + 1].y) / 2;
+          const age = time - stroke[i].time;
           const progress = Math.max(0, 1 - age / TRAIL_DURATION);
           const alpha = progress * 0.85;
 
@@ -412,7 +412,7 @@ export function ArchitectureCursor() {
             ctx.lineWidth = 0.9 + progress * 0.9;
             ctx.beginPath();
             ctx.moveTo(prevMidX, prevMidY);
-            ctx.quadraticCurveTo(stroke[i]!.x, stroke[i]!.y, nextMidX, nextMidY);
+            ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, nextMidX, nextMidY);
             ctx.stroke();
           }
 
@@ -420,7 +420,7 @@ export function ArchitectureCursor() {
           prevMidY = nextMidY;
         }
 
-        const lastAge = time - stroke[len - 1]!.time;
+        const lastAge = time - stroke[len - 1].time;
         const lastProg = Math.max(0, 1 - lastAge / TRAIL_DURATION);
         const lastAlpha = lastProg * 0.9;
         if (lastAlpha > 0.01) {
@@ -428,7 +428,7 @@ export function ArchitectureCursor() {
           ctx.lineWidth = 1.0 + lastProg * 0.9;
           ctx.beginPath();
           ctx.moveTo(prevMidX, prevMidY);
-          ctx.lineTo(stroke[len - 1]!.x, stroke[len - 1]!.y);
+          ctx.lineTo(stroke[len - 1].x, stroke[len - 1].y);
           ctx.stroke();
         }
       }
@@ -587,8 +587,12 @@ export function ArchitectureCursor() {
 export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-teal-deep text-ivory/80">
-      <div className="mx-auto max-w-[1400px] px-6 pt-14 pb-8 lg:px-10">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.9fr_1fr_1.4fr] lg:gap-12">
+      <div className="mx-auto max-w-[1400px] px-6 py-20 lg:px-10">
+        <div className="mb-16 flex flex-col items-start justify-between gap-6 border-b border-ivory/15 pb-16 md:flex-row md:items-end">
+          <h2 className="max-w-2xl text-4xl text-ivory md:text-6xl">Let's shape your next space together.</h2>
+          <a href="#contact" className="btn-primary bg-cyan !text-teal-deep hover:!bg-ivory">Book a Consultation</a>
+        </div>
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.75fr_0.9fr_1.35fr]">
           <div>
             <div className="inline-block overflow-hidden rounded-[5px] bg-ivory px-3.5 py-2 shadow-sm">
               <img src={logo} alt="STUQ logo" className="h-10 w-auto rounded-[5px]" loading="lazy" />
@@ -670,7 +674,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-14 flex flex-col justify-between gap-4 border-t border-ivory/15 pt-7 text-xs sm:flex-row sm:items-center">
+        <div className="mt-16 flex flex-col justify-between gap-4 border-t border-ivory/15 pt-8 text-xs sm:flex-row">
           <p>© {new Date().getFullYear()} STUQ – Studio for Eclectic Architecture. All rights reserved.</p>
           <div className="flex gap-6"><a href="#" className="hover:text-cyan">Privacy Policy</a><a href="#" className="hover:text-cyan">Terms</a></div>
         </div>

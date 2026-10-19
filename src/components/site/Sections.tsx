@@ -294,7 +294,7 @@ export function Hero() {
               >
                 {item.num}
               </button>
-            )).flatMap((el, idx) => (idx === 0 ? [el] : [<span key={`sep-${idx}`}>/</span>, el]))}
+            )).reduce((prev, curr, idx) => [prev, <span key={`sep-${idx}`}>/</span>, curr])}
             <span className="ml-2 inline-block h-[2px] w-8 bg-[#0B3B46]/60" />
           </div>
         </div>
