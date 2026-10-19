@@ -47,16 +47,16 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-teal-deep/95 py-3 shadow-lg backdrop-blur-md" : "bg-transparent py-5"
+        scrolled
+          ? "bg-white/90 py-3.5 shadow-sm shadow-[#067688]/5 border-b border-[#067688]/15 backdrop-blur-md"
+          : "bg-transparent py-5"
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-10">
         <a
           id="header-logo"
           href="#home"
-          className={`shrink-0 overflow-hidden rounded-[5px] transition-all duration-300 hover:scale-105 ${
-            scrolled ? "bg-ivory/95 px-3.5 py-1.5 shadow-sm" : "bg-white/80 px-3.5 py-1.5 shadow-sm border border-[#0E2638]/10 backdrop-blur-sm"
-          }`}
+          className="shrink-0 bg-transparent transition-all duration-300 hover:scale-105"
           aria-label="STUQ home"
         >
           <img
@@ -71,9 +71,7 @@ export function Header() {
             <a
               key={n.id}
               href={`#${n.id}`}
-              className={`text-[0.75rem] font-semibold uppercase tracking-[0.2em] transition-colors ${
-                scrolled ? "text-ivory/85 hover:text-cyan" : "text-[#0E2638]/85 hover:text-[#007C91]"
-              }`}
+              className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-[#0E2638]/85 transition-colors hover:text-[#067688]"
             >
               {n.label}
             </a>
@@ -84,15 +82,15 @@ export function Header() {
             href="#contact"
             className={`hidden sm:inline-flex rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
               scrolled
-                ? "btn-primary !py-3"
-                : "border border-[#0E2638]/40 text-[#0E2638] hover:bg-[#0E2638] hover:text-white"
+                ? "bg-[#067688] text-white hover:bg-[#055c6a] shadow-sm shadow-[#067688]/20"
+                : "border border-[#0E2638]/40 text-[#0E2638] hover:bg-[#067688] hover:border-[#067688] hover:text-white"
             }`}
           >
             Let's Talk
           </a>
           <button
             onClick={() => setOpen(true)}
-            className={`grid h-11 w-11 place-items-center xl:hidden ${scrolled ? "text-ivory" : "text-[#0E2638]"}`}
+            className="grid h-11 w-11 place-items-center text-[#0E2638] xl:hidden"
             aria-label="Open menu"
           >
             <Menu />

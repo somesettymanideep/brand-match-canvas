@@ -103,7 +103,7 @@ export function IntroPreloader() {
         if (r.width > 0 && r.height > 0) {
           const h = 36;
           const w = h * LOGO_ASPECT;
-          const left = r.left + 14;
+          const left = r.left;
           const top = r.top + (r.height - h) / 2;
           return { left, top, width: w, height: h };
         }
