@@ -38,7 +38,7 @@ import studioVideo from "@/assets/studio-video.mp4";
 import aboutBuilding from "@/assets/about-building.png";
 import vastu from "@/assets/vastu.jpg";
 import vastuBg from "@/assets/vastu-bg.png";
-import vastuMandala from "@/assets/vastu-mandala.png";
+import vastuMandala from "@/assets/vastu-mandala-grid.jpg";
 import p1 from "@/assets/p1.jpg";
 import p2 from "@/assets/p2.jpg";
 import p4 from "@/assets/p4.jpg";
@@ -145,9 +145,6 @@ export function Hero() {
     return () => clearInterval(interval);
   }, [isPaused, nextDiscipline]);
 
-  const active = HERO_DISCIPLINES[activeIndex];
-  const previous = HERO_DISCIPLINES[prevIndex ?? activeIndex];
-
   return (
     <section
       id="home"
@@ -173,29 +170,16 @@ export function Hero() {
           <div className="lg:col-span-7 xl:col-span-7 flex justify-center items-center relative">
             <div className="relative w-full h-[420px] sm:h-[480px] md:h-[540px] lg:h-[600px] xl:h-[680px] 2xl:h-[740px] flex items-center justify-center">
               <PixelSwap
-                key={activeIndex}
-                firstContent={
+                slides={HERO_DISCIPLINES.map((item, idx) => (
                   <img
-                    src={previous.img}
-                    alt={previous.alt}
-                    className="h-full w-full object-contain object-center select-none drop-shadow-[0_25px_45px_rgba(0,124,145,0.24)] transition-opacity duration-700 ease-in-out"
+                    key={item.id}
+                    src={item.img}
+                    alt={item.alt}
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    className="h-full w-full object-contain object-center select-none drop-shadow-[0_25px_45px_rgba(0,124,145,0.24)]"
                   />
-                }
-                secondContent={
-                  <img
-                    src={active.img}
-                    alt={active.alt}
-                    className="h-full w-full object-contain object-center select-none drop-shadow-[0_25px_45px_rgba(0,124,145,0.24)] transition-opacity duration-700 ease-in-out animate-hero-fade"
-                  />
-                }
-                active={prevIndex !== null}
-                trigger="manual"
-                pixelSize={24}
-                duration={850}
-                pixelDuration={400}
-                fade={true}
-                pattern="random"
-                pixelScale={0.15}
+                ))}
+                activeIndex={activeIndex}
                 aspectRatio="auto"
                 className="h-full w-full flex items-center justify-center"
               />
@@ -225,41 +209,52 @@ export function Hero() {
               ))}
             </div>
 
-            {/* Main Headline */}
-            <h1
-              key={`h1-${active.id}`}
-              className="mt-4 font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4.1rem] font-normal leading-[1.08] tracking-tight text-[#0E2638] animate-fade-in"
-            >
-              {active.titleLine1}
-              <br />
-              {active.titleLine2}
-              <br />
-              {active.titleLine3}
-            </h1>
+            {/* Smooth Fade Cross-fade Content Container */}
+            <div className="relative mt-4 grid">
+              {HERO_DISCIPLINES.map((item, idx) => {
+                const isActive = activeIndex === idx;
+                return (
+                  <div
+                    key={item.id}
+                    className={`col-start-1 row-start-1 flex flex-col justify-center transition-all duration-700 ease-out ${
+                      isActive
+                        ? "opacity-100 translate-y-0 pointer-events-auto z-10"
+                        : "opacity-0 translate-y-2 pointer-events-none z-0"
+                    }`}
+                  >
+                    {/* Main Headline */}
+                    <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4.1rem] font-normal leading-[1.08] tracking-tight text-[#0E2638]">
+                      {item.titleLine1}
+                      <br />
+                      {item.titleLine2}
+                      <br />
+                      {item.titleLine3}
+                    </h1>
 
-            {/* Narrative text */}
-            <p
-              key={`p-${active.id}`}
-              className="mt-5 max-w-xl text-sm sm:text-base lg:text-[1.05rem] leading-relaxed text-[#4A6973] font-normal animate-fade-in"
-            >
-              {active.text}
-            </p>
+                    {/* Narrative text */}
+                    <p className="mt-5 max-w-xl text-sm sm:text-base lg:text-[1.05rem] leading-relaxed text-[#4A6973] font-normal">
+                      {item.text}
+                    </p>
 
-            {/* Action Buttons */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a
-                href={active.ctaPrimaryHref}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#0B3B46] px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#06242B] hover:shadow-lg hover:shadow-[#0B3B46]/25 group"
-              >
-                <span>{active.ctaPrimary}</span>
-                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-              <a
-                href={active.ctaSecondaryHref}
-                className="inline-flex items-center gap-2 rounded-lg border border-[#0B3B46]/70 px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-[#0B3B46] transition-all duration-300 hover:bg-[#0B3B46] hover:text-white"
-              >
-                <span>{active.ctaSecondary}</span>
-              </a>
+                    {/* Action Buttons */}
+                    <div className="mt-8 flex flex-wrap items-center gap-4">
+                      <a
+                        href={item.ctaPrimaryHref}
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#0B3B46] px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#06242B] hover:shadow-lg hover:shadow-[#0B3B46]/25 group"
+                      >
+                        <span>{item.ctaPrimary}</span>
+                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </a>
+                      <a
+                        href={item.ctaSecondaryHref}
+                        className="inline-flex items-center gap-2 rounded-lg border border-[#0B3B46]/70 px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-wide text-[#0B3B46] transition-all duration-300 hover:bg-[#0B3B46] hover:text-white"
+                      >
+                        <span>{item.ctaSecondary}</span>
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Studio Accent Divider Line */}
@@ -683,7 +678,7 @@ export function Vastu() {
             className="reveal relative flex items-center justify-center"
             style={{ "--d": "300ms" } as React.CSSProperties}
           >
-            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl bg-white p-2 shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
+            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl bg-white p-2 transition-transform duration-500 hover:scale-[1.01]">
               <img
                 src={vastuMandala}
                 alt="Vastu Purusha Mandala layout and directional energies chart"

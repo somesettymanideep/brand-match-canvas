@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Menu, X } from "lucide-react";
+import { ArrowUp, Menu, X, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/stuq-logo.png";
 import { NAV, SOCIALS } from "./data";
 
@@ -115,33 +115,24 @@ export function Header() {
 }
 
 export function SocialRail() {
-  const [hovered, setHovered] = useState<string | null>(null);
-
   return (
-    <ul className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-1.5 md:flex" aria-label="Social media">
+    <ul className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-start gap-1.5 md:flex pointer-events-none" aria-label="Social media">
       {SOCIALS.map((s) => {
         const Icon = SOCIAL_ICONS[s.name];
-        const isHovered = hovered === s.name;
         return (
-          <li key={s.name}>
+          <li key={s.name} className="pointer-events-auto">
             <a
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.name}
-              onMouseEnter={() => setHovered(s.name)}
-              onMouseLeave={() => setHovered(null)}
-              onFocus={() => setHovered(s.name)}
-              onBlur={() => setHovered(null)}
-              className={`flex h-11 items-center rounded-r-md ${s.bgClass} text-white shadow-lg transition-all duration-300 ${s.hoverBgClass}`}
+              className={`group flex h-11 items-center rounded-r-md ${s.bgClass} text-white shadow-lg transition-all duration-300 ease-out ${s.hoverBgClass}`}
             >
               <span className="grid h-11 w-11 place-items-center shrink-0">
                 <Icon className="h-4 w-4" />
               </span>
               <span
-                className={`overflow-hidden whitespace-nowrap text-[0.68rem] font-bold uppercase tracking-[0.2em] text-white transition-all duration-300 ${
-                  isHovered ? "max-w-32 pr-4 opacity-100" : "max-w-0 pr-0 opacity-0"
-                }`}
+                className="max-w-0 overflow-hidden whitespace-nowrap pr-0 text-[0.68rem] font-bold uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 ease-out group-hover:max-w-32 group-hover:pr-4 group-hover:opacity-100 group-focus-visible:max-w-32 group-focus-visible:pr-4 group-focus-visible:opacity-100"
               >
                 {s.name}
               </span>
@@ -601,7 +592,7 @@ export function Footer() {
           <h2 className="max-w-2xl text-4xl text-ivory md:text-6xl">Let's shape your next space together.</h2>
           <a href="#contact" className="btn-primary bg-cyan !text-teal-deep hover:!bg-ivory">Book a Consultation</a>
         </div>
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.75fr_0.9fr_1.35fr]">
           <div>
             <div className="inline-block overflow-hidden rounded-[5px] bg-ivory px-3.5 py-2 shadow-sm">
               <img src={logo} alt="STUQ logo" className="h-10 w-auto rounded-[5px]" loading="lazy" />
@@ -630,8 +621,57 @@ export function Footer() {
           <FooterCol title="Services" items={["Architectural Design", "Interior Design", "Landscape Design", "Structural Design", "Project Management", "BIM Services"].map((l) => ({ label: l, href: "#services" }))} />
           <div>
             <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.3em] text-cyan">Contact</h3>
-            <p className="text-sm leading-relaxed">Studio address, email, phone and business hours will be published here once confirmed by the studio.</p>
-            <a href="#contact" className="link-line mt-5 text-ivory">Send an enquiry</a>
+            <div className="space-y-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-cyan">Corporate Office</p>
+                <a
+                  href="https://maps.google.com/?q=Vasavi+MPM+Grand,+Ameerpet,+Hyderabad"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 flex items-start gap-1.5 text-xs leading-relaxed text-ivory/80 transition-colors hover:text-cyan"
+                >
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan/90" />
+                  <span>#1215, 11th Floor, Vasavi MPM Grand, Yellareddy Guda, Ameerpet, Hyderabad, Telangana - 500 073</span>
+                </a>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-cyan">Branch Office</p>
+                <a
+                  href="https://maps.google.com/?q=Sri+Sai+Nilayam,+Chandramoulipuram,+BENZ+Circle,+Vijayawada"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 flex items-start gap-1.5 text-xs leading-relaxed text-ivory/80 transition-colors hover:text-cyan"
+                >
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan/90" />
+                  <span>Flat No: 101, Sri Sai Nilayam, Chandramoulipuram, ADJ. HDFC Bank, BENZ Circle, Vijayawada, Andhra Pradesh 520 010</span>
+                </a>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-cyan">Bangalore</p>
+                <a
+                  href="https://maps.google.com/?q=Sri+Sai+Ram+Nilayam,+Chandramoulipuram,+Adj+Hdfc+Bank,+Benz+Circle,+Vijayawada"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 flex items-start gap-1.5 text-xs leading-relaxed text-ivory/80 transition-colors hover:text-cyan"
+                >
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan/90" />
+                  <span>NO 40-14-5/2, Flat No - 101, Sri Sai Ram Nilayam, Chandramoulipuram, Adj Hdfc Bank, Benz Circle, Vijayawada -520010</span>
+                </a>
+              </div>
+
+              <div className="pt-2 border-t border-ivory/15">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-cyan">Phone</p>
+                <a
+                  href="tel:+919000299600"
+                  className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-ivory transition-colors hover:text-cyan"
+                >
+                  <Phone className="h-3.5 w-3.5 text-cyan" />
+                  <span>+91 9000299600</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div className="mt-16 flex flex-col justify-between gap-4 border-t border-ivory/15 pt-8 text-xs sm:flex-row">

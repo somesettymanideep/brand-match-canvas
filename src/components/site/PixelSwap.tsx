@@ -4,7 +4,29 @@ import './PixelSwap.css';
 
 type Pattern = 'random' | 'center' | 'edges' | 'left-to-right' | 'right-to-left' | 'top-to-bottom' | 'bottom-to-top' | 'diagonal' | 'spiral';
 interface PixelSwapProps {
-  firstContent: ReactNode; secondContent: ReactNode; pixelSize?: number; gap?: number; pixelRadius?: number; pixelSpin?: number; pixelScale?: number; fade?: boolean; duration?: number; pixelDuration?: number; pattern?: Pattern; randomness?: number; easing?: string; trigger?: 'hover' | 'click' | 'manual'; initialActive?: boolean; active?: boolean; onActiveChange?: (active: boolean) => void; onComplete?: (active: boolean) => void; aspectRatio?: string; className?: string; style?: CSSProperties;
+  firstContent?: ReactNode;
+  secondContent?: ReactNode;
+  slides?: ReactNode[];
+  activeIndex?: number;
+  pixelSize?: number;
+  gap?: number;
+  pixelRadius?: number;
+  pixelSpin?: number;
+  pixelScale?: number;
+  fade?: boolean;
+  duration?: number;
+  pixelDuration?: number;
+  pattern?: Pattern;
+  randomness?: number;
+  easing?: string;
+  trigger?: 'hover' | 'click' | 'manual';
+  initialActive?: boolean;
+  active?: boolean;
+  onActiveChange?: (active: boolean) => void;
+  onComplete?: (active: boolean) => void;
+  aspectRatio?: string;
+  className?: string;
+  style?: CSSProperties;
 }
 interface GridOptions { width: number; height: number; pixelSize: number; gap: number; pattern: Pattern; randomness: number; }
 interface FrameOptions { ease: (progress: number) => number; startScale: number; endScale: number; spin: number; fade: boolean; }
@@ -150,6 +172,8 @@ const buildKeyframes = ({ ease, startScale, endScale, spin, fade }: FrameOptions
 function PixelSwap({
   firstContent,
   secondContent,
+  slides,
+  activeIndex = 0,
   pixelSize = 64,
   gap = 0,
   pixelRadius = 0,
@@ -371,28 +395,53 @@ function PixelSwap({
       data-transitioning={!!transition}
       {...interactionProps}
     >
-      {renderLayer(firstContent, 0)}
-      {renderLayer(secondContent, 1)}
-
-      {transition && (
-        <div className="pixel-swap__grid" aria-hidden="true">
-          {transition.grid.pixels.map((pixel, index) => (
+      {slides ? (
+        slides.map((slide, index) => {
+          const isCurrent = activeIndex === index;
+          return (
             <div
-              key={pixel.id}
-              ref={element => {
-                pixelRefs.current[index] = element;
-              }}
-              className="pixel-swap__pixel"
+              key={index}
+              className="pixel-swap__layer"
               style={{
-                left: pixel.left,
-                top: pixel.top,
-                width: transition.grid.size,
-                height: transition.grid.size,
-                borderRadius: `${clamp(pixelRadius, 0, 50)}%`
+                opacity: isCurrent ? 1 : 0,
+                transform: isCurrent ? 'scale(1)' : 'scale(0.96)',
+                transition: 'opacity 750ms cubic-bezier(0.22, 1, 0.36, 1), transform 750ms cubic-bezier(0.22, 1, 0.36, 1)',
+                pointerEvents: isCurrent ? 'auto' : 'none',
+                zIndex: isCurrent ? 2 : 1,
               }}
-            />
-          ))}
-        </div>
+              data-visible={String(isCurrent)}
+              aria-hidden={!isCurrent}
+            >
+              {slide}
+            </div>
+          );
+        })
+      ) : (
+        <>
+          {renderLayer(firstContent, 0)}
+          {renderLayer(secondContent, 1)}
+
+          {transition && (
+            <div className="pixel-swap__grid" aria-hidden="true">
+              {transition.grid.pixels.map((pixel, index) => (
+                <div
+                  key={pixel.id}
+                  ref={element => {
+                    pixelRefs.current[index] = element;
+                  }}
+                  className="pixel-swap__pixel"
+                  style={{
+                    left: pixel.left,
+                    top: pixel.top,
+                    width: transition.grid.size,
+                    height: transition.grid.size,
+                    borderRadius: `${clamp(pixelRadius, 0, 50)}%`
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
