@@ -54,6 +54,13 @@ import heroArchitecture from "@/assets/hero-architecture.jpg";
 import heroInterior from "@/assets/hero-interior.png";
 import heroLandscape from "@/assets/hero-landscape.png";
 import contactBg from "@/assets/contact-bg.png";
+import servicesBg from "@/assets/services-bg.png";
+import serviceIconArch from "@/assets/service-icon-arch.png";
+import serviceIconInterior from "@/assets/service-icon-interior.png";
+import serviceIconLandscape from "@/assets/service-icon-landscape.png";
+import serviceIconStructural from "@/assets/service-icon-structural.png";
+import serviceIconPm from "@/assets/service-icon-pm.png";
+import serviceIconBim from "@/assets/service-icon-bim.png";
 
 const Container = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`mx-auto max-w-[1400px] px-6 md:pl-20 lg:px-24 ${className}`}>{children}</div>
@@ -692,105 +699,47 @@ export function Vastu() {
 
 export { Projects } from "./Projects";
 
-/* ---------------- SERVICE ICONS ---------------- */
-const ServiceArchIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M3 21h18" />
-    <path d="M5 21V9l7-6 7 6v12" />
-    <path d="M9 21v-7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v7" />
-    <path d="M9 9h6" />
-    <path d="M9 13h6" />
-  </svg>
-);
-
-const ServiceInteriorIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" />
-    <path d="M2 13a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4z" />
-    <path d="M6 19v2" />
-    <path d="M18 19v2" />
-    <path d="M8 11V8" />
-    <path d="M16 11V8" />
-  </svg>
-);
-
-const ServiceLandscapeIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 22V10" />
-    <path d="M12 10C8 10 5 6 5 2c4 0 7 3 7 8z" fill="currentColor" fillOpacity="0.15" />
-    <path d="M12 13c4 0 7-3 7-7-4 0-7 3-7 7z" fill="currentColor" fillOpacity="0.15" />
-    <path d="M12 17c-3 0-5-2-5-5 3 0 5 2 5 5z" />
-  </svg>
-);
-
-const ServiceStructuralIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <rect x="3" y="3" width="18" height="18" rx="2" />
-    <path d="M3 3l18 18" />
-    <path d="M21 3L3 21" />
-    <path d="M12 3v18" />
-    <path d="M3 12h18" />
-  </svg>
-);
-
-const ServicePmIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-    <rect x="8" y="2" width="8" height="4" rx="1" />
-    <path d="M9 12l2 2 4-4" />
-    <path d="M9 17h6" />
-  </svg>
-);
-
-const ServiceBimIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 2L2 7l10 5 10-5-10-5z" />
-    <path d="M2 17l10 5 10-5" />
-    <path d="M2 12l10 5 10-5" />
-    <line x1="12" y1="22" x2="12" y2="12" />
-  </svg>
-);
-
+/* ---------------- SERVICES DATA ---------------- */
 const SERVICES_LIST = [
   {
     num: "01",
     title: "ARCHITECTURAL\nDESIGN",
-    icon: ServiceArchIcon,
+    icon: serviceIconArch,
     desc: "Our experts prepare preliminary design sketches and concepts based on your requirements and budget, helping you explore and visualize the best options for your dream space.",
     delay: "100ms",
   },
   {
     num: "02",
     title: "INTERIOR\nDESIGN",
-    icon: ServiceInteriorIcon,
+    icon: serviceIconInterior,
     desc: "Our designers plan, research, coordinate and enhance interiors to create healthier, more functional and aesthetically pleasing environments using the space efficiently.",
     delay: "200ms",
   },
   {
     num: "03",
     title: "LANDSCAPE\nDESIGN",
-    icon: ServiceLandscapeIcon,
+    icon: serviceIconLandscape,
     desc: "Our team uses their creativity and understanding of outdoor environments to create well-designed outdoor spaces that are functional and visually appealing, with suitable plants, types of grass, furniture and other design elements.",
     delay: "300ms",
   },
   {
     num: "04",
     title: "STRUCTURAL\nDESIGN",
-    icon: ServiceStructuralIcon,
+    icon: serviceIconStructural,
     desc: "Comprehensive structural engineering analysis, foundational design, framing systems, and seismic-resilient planning coordinated to guarantee structural integrity, compliance, and safety.",
     delay: "400ms",
   },
   {
     num: "05",
     title: "PROJECT\nMANAGEMENT",
-    icon: ServicePmIcon,
+    icon: serviceIconPm,
     desc: "End-to-end execution oversight, schedule monitoring, quality assurance, cost engineering, and vendor coordination ensuring smooth construction on time and within budget.",
     delay: "500ms",
   },
   {
     num: "06",
     title: "BIM\nSERVICES",
-    icon: ServiceBimIcon,
+    icon: serviceIconBim,
     desc: "Building Information Modeling (BIM) creating coordinated 3D digital models, parametric documentation, clash detection, and multidisciplinary workflows for seamless execution.",
     delay: "600ms",
   },
@@ -799,16 +748,37 @@ const SERVICES_LIST = [
 /* ---------------- SERVICES ---------------- */
 export function Services() {
   return (
-    <section id="services" className="relative overflow-hidden bg-gradient-to-b from-[#f2f9fb] via-[#edf6f9] to-[#f6fbfc] py-24 lg:py-32">
-      {/* Decorative leaf flourish in bottom-right corner */}
-      <div className="pointer-events-none absolute -bottom-16 -right-16 opacity-20">
-        <svg viewBox="0 0 300 300" className="h-72 w-72 text-teal" fill="currentColor">
-          <path d="M150 0C67.157 0 0 67.157 0 150c0 82.843 67.157 150 150 150 82.843 0 150-67.157 150-150C300 67.157 232.843 0 150 0zm0 40c60.751 0 110 49.249 110 110 0 60.751-49.249 110-110 110-60.751 0-110-49.249-110-110 0-60.751 49.249-110 110-110z" />
-          <path d="M150 70c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z" />
-        </svg>
+    <section id="services" className="relative overflow-hidden bg-[#f0fbfe] py-24 lg:py-32">
+      {/* Top-Left Corner Element: Modern Cantilevered Residence Blueprint (prominent on large & extra large devices) */}
+      <div className="pointer-events-none absolute left-0 top-0 z-0 h-[340px] w-[320px] sm:h-[420px] sm:w-[400px] md:h-[480px] md:w-[460px] lg:h-[580px] lg:w-[540px] xl:h-[680px] xl:w-[640px] 2xl:h-[780px] 2xl:w-[740px] overflow-hidden select-none">
+        <img
+          src={servicesBg}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover object-left-top contrast-[1.08] saturate-[1.1]"
+        />
+        {/* Soft edge feathering so it blends seamlessly into the section canvas */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#f0fbfe]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f0fbfe]/90" />
       </div>
 
-      <Container className="relative">
+      {/* Bottom-Right Corner Element: Isometric Structural Framework Blueprint (prominent on large & extra large devices) */}
+      <div className="pointer-events-none absolute right-0 bottom-0 z-0 h-[340px] w-[320px] sm:h-[420px] sm:w-[400px] md:h-[480px] md:w-[460px] lg:h-[580px] lg:w-[540px] xl:h-[680px] xl:w-[640px] 2xl:h-[780px] 2xl:w-[740px] overflow-hidden select-none">
+        <img
+          src={servicesBg}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover object-right-bottom contrast-[1.08] saturate-[1.1]"
+        />
+        {/* Soft edge feathering so it blends seamlessly into the section canvas */}
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#f0fbfe]/90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-[#f0fbfe]/90" />
+      </div>
+
+      {/* Soft atmospheric gradient overlay for optimal depth and edge blending */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#f0fbfe]/30 via-transparent to-[#f0fbfe]/40" />
+
+      <Container className="relative z-10">
         {/* Centered Main Title */}
         <h2
           data-reveal
@@ -825,69 +795,71 @@ export function Services() {
           className="reveal mx-auto mt-4 max-w-2xl text-center text-sm sm:text-[0.95rem] leading-relaxed text-[#597080]"
           style={{ "--d": "200ms" } as React.CSSProperties}
         >
-          From architectural planning to interiors, structures, BIM and project management, we offer comprehensive end-to-end solutions tailored to your vision.
+          From architectural planning to interiors, landscape, structural design, project management and BIM services, we offer comprehensive end-to-end solutions tailored to your vision.
         </p>
 
         {/* 6 Service Cards Grid (3 columns on desktop, 2 on tablet, 1 on mobile) */}
         <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {SERVICES_LIST.map((srv, i) => {
-            const Icon = srv.icon;
-            return (
-              <AnimatedContent
-                key={srv.num}
-                distance={80}
-                duration={0.9}
-                ease="power3.out"
-                initialOpacity={0}
-                scale={0.92}
-                threshold={0.15}
-                delay={(i % 3) * 0.12}
+          {SERVICES_LIST.map((srv, i) => (
+            <AnimatedContent
+              key={srv.num}
+              distance={80}
+              duration={0.9}
+              ease="power3.out"
+              initialOpacity={0}
+              scale={0.92}
+              threshold={0.15}
+              delay={(i % 3) * 0.12}
+              className="h-full"
+            >
+              <div
+                className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-7 sm:p-8 shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:border-[#067688]/40 hover:bg-gradient-to-br hover:from-white hover:via-[#f9fdfe] hover:to-[#eef8fa] hover:shadow-2xl hover:shadow-[#067688]/15"
               >
-                <div
-                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-7 sm:p-8 shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 hover:border-[#067688]/40 hover:bg-gradient-to-br hover:from-white hover:via-[#f9fdfe] hover:to-[#eef8fa] hover:shadow-2xl hover:shadow-[#067688]/15"
-                >
-                  {/* Subtle ambient light aura in top-right corner on hover */}
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#067688]/0 blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-[#067688]/15" />
+                {/* Subtle ambient light aura in top-right corner on hover */}
+                <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#067688]/0 blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-[#067688]/15" />
 
-                  <div className="relative">
-                    {/* Top Row: Icon Badge + Watermark Number */}
-                    <div className="flex items-center justify-between">
-                      <div className="grid h-14 w-14 place-items-center rounded-2xl border border-[#067688]/20 bg-[#067688]/10 text-[#067688] shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-3deg] group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#067688]/30">
-                        <Icon className="h-6 w-6 transition-colors duration-300" />
-                      </div>
-                      <span className="font-display text-4xl sm:text-5xl font-extrabold tracking-wider text-[#067688]/15 transition-all duration-500 group-hover:text-[#067688]/35 select-none">
-                        {srv.num}
-                      </span>
+                <div className="relative">
+                  {/* Top Row: Icon Badge + Watermark Number */}
+                  <div className="flex items-center justify-between">
+                    <div className="grid h-16 w-16 place-items-center rounded-2xl border border-[#067688]/20 bg-[#067688]/10 shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-3deg] group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:shadow-lg group-hover:shadow-[#067688]/30">
+                      <img
+                        src={srv.icon}
+                        alt=""
+                        className="h-10 w-10 object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert"
+                      />
                     </div>
-
-                    {/* Architectural Accent Bar */}
-                    <div className="mt-6 h-0.5 w-10 rounded-full bg-[#067688]/30 transition-all duration-500 group-hover:w-20 group-hover:bg-[#067688]" />
-
-                    {/* Content: Title & Description */}
-                    <div className="mt-5">
-                      <h3 className="font-display text-xl font-bold tracking-tight text-[#0e2638] transition-colors duration-300 group-hover:text-[#067688] whitespace-pre-line leading-tight">
-                        {srv.title}
-                      </h3>
-                      <p className="mt-3.5 text-xs sm:text-[0.85rem] leading-relaxed text-[#597080] transition-colors duration-300 group-hover:text-[#334e60]">
-                        {srv.desc}
-                      </p>
-                    </div>
+                    <span className="font-display text-4xl sm:text-5xl font-extrabold tracking-wider text-[#067688]/15 transition-all duration-500 group-hover:text-[#067688]/35 select-none">
+                      {srv.num}
+                    </span>
                   </div>
 
-                  {/* Card Footer: Interactive Learn More CTA */}
-                  <div className="relative mt-8 pt-4 border-t border-slate-100 transition-colors duration-300 group-hover:border-[#067688]/15">
-                    <a
-                      href="#contact"
-                      className="inline-flex items-center gap-2.5 rounded-full border border-[#0e2638]/20 bg-slate-50/70 px-5 py-2.5 text-xs font-semibold text-[#0e2638] transition-all duration-300 group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:text-white group-hover:shadow-md group-hover:shadow-[#067688]/25"
-                    >
-                      <span>Learn More</span>
-                      <span className="text-sm transition-transform duration-300 group-hover:translate-x-1">→</span>
-                    </a>
+                  {/* Architectural Accent Bar */}
+                  <div className="mt-6 h-0.5 w-10 rounded-full bg-[#067688]/30 transition-all duration-500 group-hover:w-20 group-hover:bg-[#067688]" />
+
+                  {/* Content: Title & Description */}
+                  <div className="mt-5">
+                    <h3 className="font-display text-xl font-bold tracking-tight text-[#0e2638] transition-colors duration-300 group-hover:text-[#067688] whitespace-pre-line leading-tight">
+                      {srv.title}
+                    </h3>
+                    <p className="mt-3.5 text-xs sm:text-[0.85rem] leading-relaxed text-[#597080] transition-colors duration-300 group-hover:text-[#334e60]">
+                      {srv.desc}
+                    </p>
                   </div>
                 </div>
-              </AnimatedContent>
-            );
-          })}
+
+                {/* Card Footer: Interactive Learn More CTA */}
+                <div className="relative mt-8 pt-4 border-t border-slate-100 transition-colors duration-300 group-hover:border-[#067688]/15">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2.5 rounded-full border border-[#0e2638]/20 bg-slate-50/70 px-5 py-2.5 text-xs font-semibold text-[#0e2638] transition-all duration-300 group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:text-white group-hover:shadow-md group-hover:shadow-[#067688]/25"
+                  >
+                    <span>Learn More</span>
+                    <span className="text-sm transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  </a>
+                </div>
+              </div>
+            </AnimatedContent>
+          ))}
         </div>
       </Container>
     </section>
