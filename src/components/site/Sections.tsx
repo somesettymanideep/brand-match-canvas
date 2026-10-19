@@ -553,7 +553,7 @@ export function About() {
                 onClick={toggleSound}
                 aria-pressed={!isMuted}
                 aria-label={isMuted ? "Turn sound on" : "Turn sound off"}
-                className="absolute right-3 top-3 z-10 flex items-center gap-2 rounded-full border border-white/30 bg-black/45 px-3.5 py-2 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-cyan"
+                className="absolute right-3 top-3 z-10 flex items-center gap-2 rounded-full border border-white/30 bg-black/70 px-3.5 py-2 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-black/85 focus-visible:ring-2 focus-visible:ring-cyan"
               >
                 {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                 <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em]">
