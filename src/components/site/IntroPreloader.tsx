@@ -8,18 +8,8 @@ export function IntroPreloader() {
   const [phase, setPhase] = useState<"init" | "fade-in" | "hold" | "moving" | "done">("init");
   const [reduced, setReduced] = useState(false);
 
-  // Initialize startRect synchronously for frame-0 readiness
-  const [startRect, setStartRect] = useState<{ left: number; top: number; width: number; height: number } | null>(() => {
-    if (typeof window === "undefined") return null;
-    const startW = Math.min(260, Math.round(window.innerWidth * 0.55));
-    const startH = Math.round(startW / LOGO_ASPECT);
-    return {
-      left: (window.innerWidth - startW) / 2,
-      top: (window.innerHeight - startH) / 2,
-      width: startW,
-      height: startH,
-    };
-  });
+  // Measured in the mount effect so the server and client render the same first frame.
+  const [startRect, setStartRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
 
   const [targetRect, setTargetRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
 
