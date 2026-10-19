@@ -11,7 +11,6 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Trophy,
   X,
   Compass,
   LayoutGrid,
@@ -304,6 +303,97 @@ export function Hero() {
   );
 }
 
+function ArchitectureIcon({ className = "h-8 w-11" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 52 38"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <line x1="2" y1="35" x2="50" y2="35" />
+      <polyline points="6,35 6,32 46,32 46,35" />
+      <line x1="10" y1="32" x2="10" y2="35" />
+      <line x1="14" y1="32" x2="14" y2="35" />
+      <polygon points="12,32 12,20 38,20 38,32" />
+      <line x1="22" y1="20" x2="22" y2="32" />
+      <line x1="28" y1="20" x2="28" y2="32" />
+      <polygon points="7,20 7,9 33,9 33,20" />
+      <line x1="5" y1="8" x2="36" y2="8" strokeWidth="1.6" />
+      <line x1="13" y1="9" x2="13" y2="20" />
+      <line x1="19" y1="9" x2="19" y2="20" />
+      <line x1="25" y1="9" x2="25" y2="20" />
+      <polygon points="33,12 45,15 45,32 38,32" />
+      <line x1="33" y1="20" x2="45" y2="23" />
+      <line x1="40" y1="17" x2="40" y2="32" />
+    </svg>
+  );
+}
+
+function InteriorDesignIcon({ className = "h-8 w-11" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 52 38"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <line x1="6" y1="35" x2="48" y2="35" />
+      <path d="M38 35h8" />
+      <path d="M42 35V20c0-8-5-14-14-14-3 0-5.5 1-7.5 2.5" />
+      <path d="M22 8.5l-3.5 4h7l-3.5-4z" />
+      <path d="M18.5 12.5c0 1.5 1.5 2.5 3.5 2.5s3.5-1 3.5-2.5" />
+      <path d="M10 26v-9c0-2.5 2-4.5 4.5-4.5h8c2.5 0 4.5 2 4.5 4.5V26" />
+      <path d="M8 20.5h3.5v7H8c-1 0-1.8-.8-1.8-1.8v-3.4c0-1 .8-1.8 1.8-1.8z" />
+      <path d="M25.5 20.5H29c1 0 1.8.8 1.8 1.8v3.4c0 1-.8 1.8-1.8 1.8h-3.5v-7z" />
+      <rect x="11.5" y="24" width="14" height="4" rx="1.5" />
+      <line x1="9" y1="28" x2="7.5" y2="35" />
+      <line x1="28" y1="28" x2="29.5" y2="35" />
+      <line x1="13.5" y1="28" x2="13" y2="33" />
+      <line x1="23.5" y1="28" x2="24" y2="33" />
+    </svg>
+  );
+}
+
+function LandscapeDesignIcon({ className = "h-8 w-11" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 52 38"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M3 31c7-2 13-7 23-6 7 .7 13-3 18-5" />
+      <path d="M4 35c9 0 15-2.5 22-2 7 1 12-2 20-3" />
+      <path d="M24 25c-3 2.5-4.5 4.5-2.5 6.5 1.8 1.8 1 2.5-2.5 2.5" />
+      <path d="M27 25c-2 2.5-3 4.5-1 6.5 1.5 1.5 1 2-1.5 2" />
+      <line x1="12" y1="32" x2="12" y2="18" strokeWidth="1.5" />
+      <path d="M12 24l-3.5-3.5m3.5 0l3.5-3.5" />
+      <path d="M12 20l-4.5-4.5m4.5 0l4.5-4.5" />
+      <path d="M12 17l-3-3m3 0l3-3" />
+      <line x1="12" y1="17" x2="12" y2="11" />
+      <circle cx="9" cy="12" r="0.8" fill="currentColor" />
+      <circle cx="15" cy="12" r="0.8" fill="currentColor" />
+      <circle cx="12" cy="10.5" r="0.8" fill="currentColor" />
+      <circle cx="7.5" cy="15.5" r="0.8" fill="currentColor" />
+      <circle cx="16.5" cy="15.5" r="0.8" fill="currentColor" />
+      <path d="M40 25V13c0-3-.7-5.5-1.2-6.5-.5 1-1.2 3.5-1.2 6.5v12" />
+      <line x1="38.8" y1="25" x2="38.8" y2="27" />
+      <path d="M44.5 24V16c0-2-.5-3.5-.9-4.5-.4 1-.9 2.5-.9 4.5v8" />
+      <line x1="43.6" y1="24" x2="43.6" y2="26" />
+    </svg>
+  );
+}
+
 /* ---------------- ABOUT ---------------- */
 export function About() {
   const [videoOpen, setVideoOpen] = useState(false);
@@ -359,25 +449,78 @@ export function About() {
               appeal.
             </p>
 
-            {/* Awards Box */}
+            {/* Disciplines & Brochure Downloads (Architecture | Interior Design | Landscape Design) */}
             <div
               data-reveal
-              className="reveal mt-8 flex items-center gap-4 rounded-2xl border border-[#d3ecf1] bg-[#f0f8fa] p-4 sm:gap-5 sm:p-5 shadow-sm"
+              className="reveal mt-8 rounded-2xl border border-[#d3ecf1] bg-[#f8fcfe] p-3 sm:p-4 shadow-sm"
               style={{ "--d": "300ms" } as React.CSSProperties}
             >
-              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#a3d9e3]/60 text-teal">
-                <Trophy className="h-7 w-7 text-teal" strokeWidth={1.8} />
-              </div>
-              <div className="h-12 w-px bg-[#cbd5e1]/70" />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-extrabold uppercase tracking-wider text-teal">AWARDS</p>
-                <p className="mt-0.5 text-[0.68rem] font-semibold uppercase tracking-wider text-[#64748b]">
-                  THE INDIA DESIGN AWARDS 2024.
-                </p>
-                <p className="mt-1 text-xs font-medium leading-snug text-[#1e293b] sm:text-sm">
-                  Our firm has been awarded the prestigious title of{" "}
-                  <span className="font-semibold">"Outstanding Firm for Innovative Designs"</span>
-                </p>
+              <div className="grid grid-cols-1 divide-y divide-[#cbd5e1]/70 sm:grid-cols-3 sm:divide-y-0 sm:divide-x sm:divide-[#cbd5e1]/70">
+                {/* Architecture */}
+                <div className="group flex flex-col items-center justify-between gap-2.5 px-2 py-3 text-center sm:py-1">
+                  <div className="flex h-10 items-center justify-center text-teal transition-transform duration-300 group-hover:scale-110">
+                    <ArchitectureIcon className="h-8 w-11" />
+                  </div>
+                  <h4 className="font-serif text-sm sm:text-base font-normal tracking-wide text-[#0e2638] transition-colors group-hover:text-teal">
+                    Architecture
+                  </h4>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center gap-1.5 text-[0.72rem] sm:text-xs font-semibold text-teal transition-colors hover:text-teal-deep focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal"
+                    aria-label="Download Architecture Brochure"
+                  >
+                    <Download className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    <span>Download Brochure</span>
+                  </a>
+                </div>
+
+                {/* Interior Design */}
+                <div className="group flex flex-col items-center justify-between gap-2.5 px-2 py-3 text-center sm:py-1">
+                  <div className="flex h-10 items-center justify-center text-teal transition-transform duration-300 group-hover:scale-110">
+                    <InteriorDesignIcon className="h-8 w-11" />
+                  </div>
+                  <h4 className="font-serif text-sm sm:text-base font-normal tracking-wide text-[#0e2638] transition-colors group-hover:text-teal">
+                    Interior Design
+                  </h4>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center gap-1.5 text-[0.72rem] sm:text-xs font-semibold text-teal transition-colors hover:text-teal-deep focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal"
+                    aria-label="Download Interior Design Brochure"
+                  >
+                    <Download className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    <span>Download Brochure</span>
+                  </a>
+                </div>
+
+                {/* Landscape Design */}
+                <div className="group flex flex-col items-center justify-between gap-2.5 px-2 py-3 text-center sm:py-1">
+                  <div className="flex h-10 items-center justify-center text-teal transition-transform duration-300 group-hover:scale-110">
+                    <LandscapeDesignIcon className="h-8 w-11" />
+                  </div>
+                  <h4 className="font-serif text-sm sm:text-base font-normal tracking-wide text-[#0e2638] transition-colors group-hover:text-teal">
+                    Landscape Design
+                  </h4>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center gap-1.5 text-[0.72rem] sm:text-xs font-semibold text-teal transition-colors hover:text-teal-deep focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal"
+                    aria-label="Download Landscape Design Brochure"
+                  >
+                    <Download className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    <span>Download Brochure</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -403,93 +546,6 @@ export function About() {
                 </span>
                 <span className="text-sm font-semibold tracking-wide text-white">Watch Video</span>
               </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom: Download Portfolio Row Box */}
-        <div
-          data-reveal
-          className="reveal mt-12 rounded-2xl border border-[#d6ecf0] bg-[#f2f8fa] p-5 sm:p-7 lg:mt-16"
-          style={{ "--d": "400ms" } as React.CSSProperties}
-        >
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            {/* Left Title & Subtitle */}
-            <div className="shrink-0 lg:max-w-[260px]">
-              <h3 className="font-display text-xl font-bold text-[#0f172a] sm:text-2xl">Download Portfolio</h3>
-              <div className="mt-1.5 h-[2.5px] w-8 rounded-full bg-teal" />
-              <p className="mt-3 text-xs leading-relaxed text-[#64748b] sm:text-sm">
-                Explore our work across architecture, interiors and landscape projects.
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div className="hidden h-16 w-px bg-[#cbd5e1]/60 lg:block" />
-
-            {/* 3 Portfolio Items */}
-            <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
-              {/* Architecture Card */}
-              <div className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-sm transition-all duration-300 hover:border-teal hover:shadow-md">
-                <div className="flex min-w-0 items-center gap-3">
-                  <img src={p1} alt="Architecture Project" className="h-13 w-15 shrink-0 rounded-lg object-cover" />
-                  <div className="min-w-0">
-                    <h4 className="truncate font-bold text-sm text-[#0f172a] transition-colors group-hover:text-teal">
-                      Architecture
-                    </h4>
-                    <p className="text-[0.72rem] text-[#64748b]">Project Portfolio</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Download Architecture Portfolio"
-                  title="Download Architecture Portfolio"
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-teal/70 text-teal transition-all duration-300 group-hover:bg-teal group-hover:text-white"
-                >
-                  <Download className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* Interior Card */}
-              <div className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-sm transition-all duration-300 hover:border-teal hover:shadow-md">
-                <div className="flex min-w-0 items-center gap-3">
-                  <img src={p2} alt="Interior Project" className="h-13 w-15 shrink-0 rounded-lg object-cover" />
-                  <div className="min-w-0">
-                    <h4 className="truncate font-bold text-sm text-[#0f172a] transition-colors group-hover:text-teal">
-                      Interior
-                    </h4>
-                    <p className="text-[0.72rem] text-[#64748b]">Project Portfolio</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Download Interior Portfolio"
-                  title="Download Interior Portfolio"
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-teal/70 text-teal transition-all duration-300 group-hover:bg-teal group-hover:text-white"
-                >
-                  <Download className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* Landscape Card */}
-              <div className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-sm transition-all duration-300 hover:border-teal hover:shadow-md">
-                <div className="flex min-w-0 items-center gap-3">
-                  <img src={p4} alt="Landscape Project" className="h-13 w-15 shrink-0 rounded-lg object-cover" />
-                  <div className="min-w-0">
-                    <h4 className="truncate font-bold text-sm text-[#0f172a] transition-colors group-hover:text-teal">
-                      Landscape
-                    </h4>
-                    <p className="text-[0.72rem] text-[#64748b]">Project Portfolio</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Download Landscape Portfolio"
-                  title="Download Landscape Portfolio"
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-teal/70 text-teal transition-all duration-300 group-hover:bg-teal group-hover:text-white"
-                >
-                  <Download className="h-4 w-4" />
-                </button>
-              </div>
             </div>
           </div>
         </div>
