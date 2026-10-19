@@ -34,7 +34,7 @@ import {
 import { PROJECTS, SERVICES, FAQS } from "./data";
 import studio from "@/assets/studio.jpg";
 import studioVideo from "@/assets/studio-video.mp4";
-import aboutBuilding from "@/assets/about-building.png";
+import studioPoster from "@/assets/studio-video-poster.jpg";
 import vastu from "@/assets/vastu.jpg";
 import vastuBg from "@/assets/vastu-bg.png";
 import vastuMandala from "@/assets/vastu-mandala-grid.jpg";
@@ -283,7 +283,8 @@ export function Hero() {
 
           {/* Discipline Pagination Counter */}
           <div className="flex items-center gap-2 font-mono text-xs font-semibold tracking-widest text-[#5A7C85]">
-            {HERO_DISCIPLINES.map((item, idx) => (
+            {HERO_DISCIPLINES.flatMap((item, idx) => [
+              idx > 0 ? <span key={`sep-${item.id}`}>/</span> : null,
               <button
                 key={item.id}
                 type="button"
@@ -293,8 +294,8 @@ export function Hero() {
                 }`}
               >
                 {item.num}
-              </button>
-            )).reduce((prev, curr, idx) => [prev, <span key={`sep-${idx}`}>/</span>, curr])}
+              </button>,
+            ])}
             <span className="ml-2 inline-block h-[2px] w-8 bg-[#0B3B46]/60" />
           </div>
         </div>
@@ -396,28 +397,22 @@ function LandscapeDesignIcon({ className = "h-8 w-11" }: { className?: string })
 
 /* ---------------- ABOUT ---------------- */
 export function About() {
-  const [videoOpen, setVideoOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const sync = () => setIsMuted(video.muted);
+    video.addEventListener("volumechange", sync);
+    return () => video.removeEventListener("volumechange", sync);
+  }, []);
 
   const toggleSound = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        videoRef.current.play();
-        setIsPlaying(true);
-      }
-    }
+    const next = !isMuted;
+    setIsMuted(next);
+    const video = videoRef.current;
+    if (video && !next) void video.play().catch(() => {});
   };
 
   return (
@@ -525,66 +520,38 @@ export function About() {
             </div>
           </div>
 
-          {/* Right: Architectural Illustration with Watch Video Pill */}
+          {/* Right: Studio film — autoplays, native controls, sound on/off */}
           <div data-reveal className="reveal relative flex justify-center lg:justify-end" style={{ "--d": "200ms" } as React.CSSProperties}>
-            <div className="group relative w-full max-w-lg overflow-hidden rounded-2xl shadow-xl transition-transform duration-500 hover:scale-[1.01]">
-              <img
-                src={aboutBuilding}
-                alt="Architecture illustration with 3D, 4D, 6D design process"
-                className="h-full w-full object-cover"
+            <div className="group relative w-full max-w-lg overflow-hidden rounded-2xl shadow-xl">
+              <video
+                ref={videoRef}
+                src={studioVideo}
+                poster={studioPoster}
+                autoPlay
+                muted={isMuted}
+                loop
+                playsInline
+                controls
+                preload="metadata"
+                aria-label="Studio for Eclectic Architecture film"
+                className="aspect-video h-full w-full bg-black object-cover"
               />
-
-              {/* Watch Video Glassmorphism Pill */}
               <button
                 type="button"
-                onClick={() => setVideoOpen(true)}
-                aria-label="Watch Studio Video"
-                className="absolute bottom-6 right-6 flex items-center gap-3 rounded-full border border-white/30 bg-black/40 px-5 py-2.5 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-black/60 focus-visible:ring-2 focus-visible:ring-cyan"
+                onClick={toggleSound}
+                aria-pressed={!isMuted}
+                aria-label={isMuted ? "Turn sound on" : "Turn sound off"}
+                className="absolute right-3 top-3 z-10 flex items-center gap-2 rounded-full border border-white/30 bg-black/45 px-3.5 py-2 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-cyan"
               >
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-white text-black shadow transition-transform group-hover:scale-110">
-                  <Play className="ml-0.5 h-4 w-4 fill-current text-black" />
+                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em]">
+                  {isMuted ? "Sound off" : "Sound on"}
                 </span>
-                <span className="text-sm font-semibold tracking-wide text-white">Watch Video</span>
               </button>
             </div>
           </div>
         </div>
       </Container>
-
-      {/* Interactive Video Modal */}
-      {videoOpen && (
-        <div
-          className="fixed inset-0 z-[70] grid place-items-center bg-teal-deep/90 p-4 sm:p-8 backdrop-blur-sm animate-fade-in"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Studio film"
-          onClick={() => setVideoOpen(false)}
-        >
-          <div
-            className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl border border-white/20"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <video
-              ref={videoRef}
-              src={studioVideo}
-              autoPlay
-              controls
-              loop
-              muted={isMuted}
-              playsInline
-              className="h-full w-full object-cover"
-            />
-            {/* Modal Close Button */}
-            <button
-              onClick={() => setVideoOpen(false)}
-              aria-label="Close video"
-              className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-black/60 text-white backdrop-blur-md transition-all hover:bg-black hover:scale-110"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
