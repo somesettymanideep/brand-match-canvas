@@ -98,9 +98,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// Mirrors the head script above so the client's first render agrees with the DOM it finds.
+function introShouldPlay() {
+  try {
+    const nav = performance.getEntriesByType("navigation");
+    const isReload =
+      nav && nav.length > 0
+        ? (nav[0] as PerformanceNavigationTiming).type === "reload"
+        : (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1;
+    if (isReload) sessionStorage.removeItem("sea_intro_played");
+    const force = window.location.search.indexOf("intro=1") !== -1;
+    const played = sessionStorage.getItem("sea_intro_played") === "true";
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return (force || !played) && !reduced;
+  } catch {
+    return false;
+  }
+}
+
 function RootShell({ children }: { children: ReactNode }) {
+  const intro = typeof window !== "undefined" && introShouldPlay();
   return (
-    <html lang="en">
+    <html lang="en" className={intro ? "intro-active" : undefined}>
       <head>
         <HeadContent />
         <script

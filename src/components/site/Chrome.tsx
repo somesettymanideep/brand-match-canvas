@@ -320,7 +320,9 @@ export function ArchitectureCursor() {
       const points = pointsRef.current;
 
       // Prune points that have fully faded out
-      while (points.length > 0 && time - points[0].time >= TRAIL_DURATION) {
+      while (points.length > 0) {
+        const first = points[0];
+        if (!first || time - first.time < TRAIL_DURATION) break;
         points.shift();
       }
 
@@ -340,6 +342,7 @@ export function ArchitectureCursor() {
       let currentStroke: TrailPoint[] = [];
       for (let i = 0; i < points.length; i++) {
         const pt = points[i];
+        if (!pt) continue;
         if (pt.isStart && currentStroke.length > 0) {
           strokes.push(currentStroke);
           currentStroke = [];
@@ -354,37 +357,47 @@ export function ArchitectureCursor() {
       for (const stroke of strokes) {
         const len = stroke.length;
         if (len === 1) {
-          const age = time - stroke[0].time;
-          const progress = Math.max(0, 1 - age / TRAIL_DURATION);
-          const alpha = progress * 0.75;
-          if (alpha > 0.01) {
-            ctx.fillStyle = `rgba(6, 118, 136, ${alpha})`;
-            ctx.beginPath();
-            ctx.arc(stroke[0].x, stroke[0].y, 1.2, 0, Math.PI * 2);
-            ctx.fill();
+          const p0 = stroke[0];
+          if (p0) {
+            const age = time - p0.time;
+            const progress = Math.max(0, 1 - age / TRAIL_DURATION);
+            const alpha = progress * 0.75;
+            if (alpha > 0.01) {
+              ctx.fillStyle = `rgba(6, 118, 136, ${alpha})`;
+              ctx.beginPath();
+              ctx.arc(p0.x, p0.y, 1.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
           }
           continue;
         }
 
         if (len === 2) {
-          const age = time - stroke[1].time;
-          const progress = Math.max(0, 1 - age / TRAIL_DURATION);
-          const alpha = progress * 0.85;
-          if (alpha > 0.01) {
-            ctx.strokeStyle = `rgba(6, 118, 136, ${alpha})`;
-            ctx.lineWidth = 1.0 + progress * 0.8;
-            ctx.beginPath();
-            ctx.moveTo(stroke[0].x, stroke[0].y);
-            ctx.lineTo(stroke[1].x, stroke[1].y);
-            ctx.stroke();
+          const p0 = stroke[0];
+          const p1 = stroke[1];
+          if (p0 && p1) {
+            const age = time - p1.time;
+            const progress = Math.max(0, 1 - age / TRAIL_DURATION);
+            const alpha = progress * 0.85;
+            if (alpha > 0.01) {
+              ctx.strokeStyle = `rgba(6, 118, 136, ${alpha})`;
+              ctx.lineWidth = 1.0 + progress * 0.8;
+              ctx.beginPath();
+              ctx.moveTo(p0.x, p0.y);
+              ctx.lineTo(p1.x, p1.y);
+              ctx.stroke();
+            }
           }
           continue;
         }
 
         // Draw smooth quadratic curves through midpoints
-        const mid0X = (stroke[0].x + stroke[1].x) / 2;
-        const mid0Y = (stroke[0].y + stroke[1].y) / 2;
-        const age0 = time - stroke[0].time;
+        const p0 = stroke[0];
+        const p1 = stroke[1];
+        if (!p0 || !p1) continue;
+        const mid0X = (p0.x + p1.x) / 2;
+        const mid0Y = (p0.y + p1.y) / 2;
+        const age0 = time - p0.time;
         const prog0 = Math.max(0, 1 - age0 / TRAIL_DURATION);
         const alpha0 = prog0 * 0.8;
 
@@ -392,7 +405,7 @@ export function ArchitectureCursor() {
           ctx.strokeStyle = `rgba(6, 118, 136, ${alpha0})`;
           ctx.lineWidth = 0.9 + prog0 * 0.8;
           ctx.beginPath();
-          ctx.moveTo(stroke[0].x, stroke[0].y);
+          ctx.moveTo(p0.x, p0.y);
           ctx.lineTo(mid0X, mid0Y);
           ctx.stroke();
         }
@@ -401,9 +414,12 @@ export function ArchitectureCursor() {
         let prevMidY = mid0Y;
 
         for (let i = 1; i < len - 1; i++) {
-          const nextMidX = (stroke[i].x + stroke[i + 1].x) / 2;
-          const nextMidY = (stroke[i].y + stroke[i + 1].y) / 2;
-          const age = time - stroke[i].time;
+          const cur = stroke[i];
+          const nxt = stroke[i + 1];
+          if (!cur || !nxt) continue;
+          const nextMidX = (cur.x + nxt.x) / 2;
+          const nextMidY = (cur.y + nxt.y) / 2;
+          const age = time - cur.time;
           const progress = Math.max(0, 1 - age / TRAIL_DURATION);
           const alpha = progress * 0.85;
 
@@ -412,7 +428,7 @@ export function ArchitectureCursor() {
             ctx.lineWidth = 0.9 + progress * 0.9;
             ctx.beginPath();
             ctx.moveTo(prevMidX, prevMidY);
-            ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, nextMidX, nextMidY);
+            ctx.quadraticCurveTo(cur.x, cur.y, nextMidX, nextMidY);
             ctx.stroke();
           }
 
@@ -420,16 +436,19 @@ export function ArchitectureCursor() {
           prevMidY = nextMidY;
         }
 
-        const lastAge = time - stroke[len - 1].time;
-        const lastProg = Math.max(0, 1 - lastAge / TRAIL_DURATION);
-        const lastAlpha = lastProg * 0.9;
-        if (lastAlpha > 0.01) {
-          ctx.strokeStyle = `rgba(6, 118, 136, ${lastAlpha})`;
-          ctx.lineWidth = 1.0 + lastProg * 0.9;
-          ctx.beginPath();
-          ctx.moveTo(prevMidX, prevMidY);
-          ctx.lineTo(stroke[len - 1].x, stroke[len - 1].y);
-          ctx.stroke();
+        const last = stroke[len - 1];
+        if (last) {
+          const lastAge = time - last.time;
+          const lastProg = Math.max(0, 1 - lastAge / TRAIL_DURATION);
+          const lastAlpha = lastProg * 0.9;
+          if (lastAlpha > 0.01) {
+            ctx.strokeStyle = `rgba(6, 118, 136, ${lastAlpha})`;
+            ctx.lineWidth = 1.0 + lastProg * 0.9;
+            ctx.beginPath();
+            ctx.moveTo(prevMidX, prevMidY);
+            ctx.lineTo(last.x, last.y);
+            ctx.stroke();
+          }
         }
       }
 
