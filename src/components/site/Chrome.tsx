@@ -587,12 +587,8 @@ export function ArchitectureCursor() {
 export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-teal-deep text-ivory/80">
-      <div className="mx-auto max-w-[1400px] px-6 py-20 lg:px-10">
-        <div className="mb-16 flex flex-col items-start justify-between gap-6 border-b border-ivory/15 pb-16 md:flex-row md:items-end">
-          <h2 className="max-w-2xl text-4xl text-ivory md:text-6xl">Let's shape your next space together.</h2>
-          <a href="#contact" className="btn-primary bg-cyan !text-teal-deep hover:!bg-ivory">Book a Consultation</a>
-        </div>
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.1fr_0.75fr_0.9fr_1.35fr]">
+      <div className="mx-auto max-w-[1400px] px-6 pt-14 pb-8 lg:px-10">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.9fr_1fr_1.4fr] lg:gap-12">
           <div>
             <div className="inline-block overflow-hidden rounded-[5px] bg-ivory px-3.5 py-2 shadow-sm">
               <img src={logo} alt="STUQ logo" className="h-10 w-auto rounded-[5px]" loading="lazy" />
@@ -674,7 +670,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 flex flex-col justify-between gap-4 border-t border-ivory/15 pt-8 text-xs sm:flex-row">
+        <div className="mt-14 flex flex-col justify-between gap-4 border-t border-ivory/15 pt-7 text-xs sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} STUQ – Studio for Eclectic Architecture. All rights reserved.</p>
           <div className="flex gap-6"><a href="#" className="hover:text-cyan">Privacy Policy</a><a href="#" className="hover:text-cyan">Terms</a></div>
         </div>
