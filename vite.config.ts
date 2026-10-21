@@ -9,7 +9,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // GITHUB_PAGES=1 switches the build to a static GitHub Pages target:
 // nitro "static" preset + prerendered "/" + subpath base for project pages.
 // Lovable's own build (no GITHUB_PAGES env) keeps the Cloudflare target unchanged.
-const githubPages = process.env.GITHUB_PAGES === "1";
+const githubPages = process.env["GITHUB_PAGES"] === "1";
 
 export default defineConfig({
   tanstackStart: {
