@@ -35,12 +35,12 @@ jobs:
 
       - name: Prepare Pages output
         run: |
-          touch dist/client/.nojekyll
-          cp dist/client/index.html dist/client/404.html
+          touch .output/public/.nojekyll
+          cp .output/public/index.html .output/public/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/client
+          path: .output/public
 
   deploy:
     needs: build
