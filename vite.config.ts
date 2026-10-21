@@ -26,7 +26,6 @@ export default defineConfig({
   ...(githubPages
     ? {
         vite: { base: "/brand-match-canvas/" },
-        nitro: { preset: "static" },
       }
     : {}),
 });
