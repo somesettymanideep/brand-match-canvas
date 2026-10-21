@@ -638,7 +638,7 @@ export function Vastu() {
             className="reveal relative flex items-center justify-center"
             style={{ "--d": "300ms" } as React.CSSProperties}
           >
-            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl bg-white p-2 transition-transform duration-500 hover:scale-[1.01]">
+            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl bg-white p-2 shadow-none transition-transform duration-500 hover:scale-[1.01] hover:shadow-none">
               <img
                 src={vastuMandala}
                 alt="Vastu Purusha Mandala layout and directional energies chart"
@@ -774,13 +774,13 @@ export function Services() {
                 <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#067688]/0 blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-[#067688]/15" />
 
                 <div className="relative">
-                  {/* Top Row: Icon Badge + Watermark Number */}
+                  {/* Top Row: Icon + Watermark Number */}
                   <div className="flex items-center justify-between">
-                    <div className="grid h-16 w-16 place-items-center rounded-2xl border border-[#067688]/20 bg-[#067688]/10 shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-3deg] group-hover:border-[#067688] group-hover:bg-[#067688] group-hover:shadow-lg group-hover:shadow-[#067688]/30">
+                    <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110">
                       <img
                         src={srv.icon}
                         alt=""
-                        className="h-10 w-10 object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert"
+                        className="h-full w-full object-contain"
                       />
                     </div>
                     <span className="font-display text-4xl sm:text-5xl font-extrabold tracking-wider text-[#067688]/15 transition-all duration-500 group-hover:text-[#067688]/35 select-none">
