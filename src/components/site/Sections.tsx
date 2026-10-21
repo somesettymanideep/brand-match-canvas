@@ -638,7 +638,7 @@ export function Vastu() {
             className="reveal relative flex items-center justify-center"
             style={{ "--d": "300ms" } as React.CSSProperties}
           >
-            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl bg-white p-2 shadow-none transition-transform duration-500 hover:scale-[1.01] hover:shadow-none">
+            <div className="relative w-full max-w-[530px] overflow-hidden rounded-xl shadow-none transition-transform duration-500 hover:scale-[1.01] hover:shadow-none">
               <img
                 src={vastuMandala}
                 alt="Vastu Purusha Mandala layout and directional energies chart"
